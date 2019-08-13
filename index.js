@@ -27,9 +27,11 @@ client.once('ready', () => {
 
 client.login(auth.token);
 
+const prefix = '!xb'
+
 client.on('message', message => {
-    if (message.content.substring(0, 3) == '!xb') {
-        var args = message.content.substring(4).split(' ');
+    if (message.content.startsWith(prefix)) {
+        var args = message.content.substring(prefix.length + 1).split(' ');
         var cmd = args[0];
         switch (cmd) {
             case 'help':

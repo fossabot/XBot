@@ -6,6 +6,7 @@ var currency = require('./productivity/currency_converter')
 var base = require('./productivity/base_converter')
 var hash = require('./productivity/hash')
 var roman = require('./productivity/roman_converter')
+var color = require('./productivity/color_converter')
 
 const client = new Discord.Client();
 
@@ -29,7 +30,7 @@ client.on('message', message => {
         var cmd = args[0];
         switch (cmd) {
             case 'help':
-                message.channel.send('Hi! I am XBot! This is what I can do: \n currency_convert: Converts values from one currency to another: \n ```* currency_convert [value(FLOAT)] [fromCurerency(3 LETTER STRING)] [toCurrency(3 LETTER STRING)] ``` \n base_convert: Converts values from one base to another: \n ```* base_covert [value(INT)] [fromBase(2<=INT<=32)] [toBase(2<=INT<=32)] \n * base_covert [value(INT)] [fromBase(STRING={BIN,OCT,DEC,HEX})] [toBase(STRING={BIN,OCT,DEC,HEX})]``` \n hash: Hashes input using md5, sha1, and sha256: \n ```hash [input(STRING)]```');
+                message.channel.send('Hi! I am XBot! This is what I can do:\ncurrency_convert: Converts values from one currency to another:\n```* currency_convert [value(FLOAT)] [fromCurerency(3 LETTER STRING)] [toCurrency(3 LETTER STRING)] ```\nbase_convert: Converts values from one base to another:\n```* base_convert [value(INT)] [fromBase(2<=INT<=32)] [toBase(2<=INT<=32)]\n```\n```* base_convert [value(INT)] [fromBase(STRING={BIN,OCT,DEC,HEX})] [toBase(STRING={BIN,OCT,DEC,HEX})]```\nhash: Hashes input using md5, sha1, and sha256:\n```hash [input(STRING)]```\nroman_convert: Works both ways:\n```* roman_convert [DECIMAL_NUMBER|ROMAN_NUMBER]\n```\ncolor_convert: Converts color values between HEX and RBG. Works both ways:\n```* color_convert [HEX(#000000)|RGB((0,0,0)) Value] [HEX|RGB] to [HEX|RGB]```');
                 break;
             case 'currency_convert':
                 currency.currency_convert(args, message);
@@ -42,6 +43,9 @@ client.on('message', message => {
                 break;
             case 'roman_convert':
                 roman.roman_converter(args, message);
+                break;
+            case 'color_convert':
+                color.color_convert(args, message);
                 break;
         }
     }

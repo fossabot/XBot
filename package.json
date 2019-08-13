@@ -1,0 +1,17 @@
+{
+  "name": "xbot",
+  "version": "1.0.0",
+  "description": "TODO",
+  "main": "index.js",
+  "author": "Paul Soporan",
+  "license": "GNU Lesser General Public License v3.0",
+  "dependencies": {
+    "discord.js": "^11.5.1",
+    "eslint": "^6.1.0",
+    "node-opus": "^0.3.2",
+    "save": "^2.4.0",
+    "tiny-hashes": "^1.0.1",
+    "winston": "^3.2.1",
+    "xmlhttprequest": "^1.8.0"
+  }
+}

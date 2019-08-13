@@ -5,6 +5,7 @@ const auth = require('./auth.json')
 var currency = require('./productivity/currency_converter')
 var base = require('./productivity/base_converter')
 var hash = require('./productivity/hash')
+var roman = require('./productivity/roman_converter')
 
 const client = new Discord.Client();
 
@@ -38,6 +39,9 @@ client.on('message', message => {
                 break;
             case 'hash':
                 hash.hash(args, message);
+                break;
+            case 'roman_convert':
+                roman.roman_converter(args, message);
                 break;
         }
     }

@@ -10,6 +10,7 @@ var color = require('./productivity/color_converter')
 
 var kick = require('./discord/kick')
 var avatar = require('./discord/avatar')
+var ban = require('./discord/ban')
 
 const client = new Discord.Client();
 
@@ -58,6 +59,9 @@ client.on('message', message => {
             case 'avatar':
                 avatar.avatar(message);
                 break;
+            case 'ban':
+            ban.ban(message);
+            break;
         }
     }
 });

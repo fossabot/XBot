@@ -86,3 +86,9 @@ typings/
 
 # DynamoDB Local files
 .dynamodb/
+
+# VS Code directory
+.vscode/
+
+# The auth.json file
+/auth.json

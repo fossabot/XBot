@@ -1,5 +1,5 @@
 module.exports = {
-    kick: function (args, message) {
+    kick: function (message) {
         if (!message.guild) return;
         const user = message.mentions.users.first();
         if (user) {

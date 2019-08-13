@@ -54,7 +54,7 @@ client.on('message', message => {
                 color.color_convert(args, message);
                 break;
             case 'kick':
-                kick.kick(args, message);
+                kick.kick(message);
                 break;
             case 'avatar':
                 avatar.avatar(message);

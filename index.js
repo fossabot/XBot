@@ -25,8 +25,8 @@ client.once('ready', () => {
 client.login(auth.token);
 
 client.on('message', message => {
-    if (message.content.substring(0, 4) == 'xbot') {
-        var args = message.content.substring(5).split(' ');
+    if (message.content.substring(0, 3) == '!xb') {
+        var args = message.content.substring(4).split(' ');
         var cmd = args[0];
         switch (cmd) {
             case 'help':
@@ -46,6 +46,9 @@ client.on('message', message => {
                 break;
             case 'color_convert':
                 color.color_convert(args, message);
+                break;
+            case 'kick':
+                avatar.avatar(args, message);
                 break;
         }
     }

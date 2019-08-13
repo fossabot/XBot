@@ -1,7 +1,7 @@
 const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
 module.exports = {
-    currency_convert : function(args, message) {
+    currency_convert: function (args, message) {
         if (args[3] == 'to') {
             var v = args[1];
             var from = args[2];

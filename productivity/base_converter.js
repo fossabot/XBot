@@ -1,5 +1,5 @@
 module.exports = {
-    base_convert : function(args, message) {
+    base_convert: function (args, message) {
         if (args[3] == 'to') {
             var v = args[1];
             if (args[2] == 'BIN' || args[2] == 'OCT' || args[2] == 'DEC' || args[2] == 'HEX') {

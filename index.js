@@ -9,6 +9,7 @@ var roman = require('./productivity/roman_converter')
 var color = require('./productivity/color_converter')
 
 var kick = require('./discord/kick')
+var avatar = require('./discord/avatar')
 
 const client = new Discord.Client();
 
@@ -51,6 +52,9 @@ client.on('message', message => {
                 break;
             case 'kick':
                 kick.kick(args, message);
+                break;
+            case 'avatar':
+                avatar.avatar(message);
                 break;
         }
     }

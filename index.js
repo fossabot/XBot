@@ -8,6 +8,8 @@ var hash = require('./productivity/hash')
 var roman = require('./productivity/roman_converter')
 var color = require('./productivity/color_converter')
 
+var kick = require('./discord/kick')
+
 const client = new Discord.Client();
 
 // Configure logger settings
@@ -48,7 +50,7 @@ client.on('message', message => {
                 color.color_convert(args, message);
                 break;
             case 'kick':
-                avatar.avatar(args, message);
+                kick.kick(args, message);
                 break;
         }
     }

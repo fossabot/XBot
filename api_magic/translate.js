@@ -18,7 +18,7 @@ module.exports = {
             Http.onreadystatechange = function () {
                 if (this.readyState == 4 && this.status == 200) {
                     var Obj = JSON.parse(this.responseText);
-                    message.channel.send('Translated:\n`' + Obj.text[0] + '`\n*Powered by Yandex.Translate*');
+                    message.channel.send('Translated:\n`' + Obj.text[0] + '`\n**Powered by Yandex.Translate**\nhttp://translate.yandex.com');
                 }
             }
         } else {

@@ -14,6 +14,7 @@ var ban = require('./discord/ban')
 var nick = require('./discord/nick')
 
 var youtube = require('./api_magic/youtube')
+var reddit = require('./api_magic/reddit')
 
 const client = new Discord.Client();
 
@@ -70,6 +71,9 @@ client.on('message', message => {
                 break;
             case 'yt_search':
                 youtube.search(args, message);
+                break;
+            case 'reddit':
+                reddit.reddit(args, message);
                 break;
         }
     }

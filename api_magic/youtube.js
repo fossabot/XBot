@@ -4,12 +4,10 @@ const api_keys = require('../api_keys.json')
 
 module.exports = {
     search: function (args, message) {
-        var s = "";
-        for (var i = 1; i < args.length; ++i) {
-            s += args[i];
-        }
+        args.splice(0, 1);
+        var s = args.join(" ");
         var Http = new XMLHttpRequest();
-        var url = 'https://www.googleapis.com/youtube/v3/search?q=' + s + '&part=snippet&maxResults=1&order=relevance&key=' + api_keys.google;
+        var url = 'https://www.googleapis.com/youtube/v3/search?q=' + s + '&part=snippet&maxResults=1&order=relevance&regionCode=US&safeSearch=moderate&key=' + api_keys.google;
         Http.open("GET", url);
         Http.send();
         Http.onreadystatechange = function () {

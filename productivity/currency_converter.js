@@ -1,6 +1,6 @@
-const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
-const api_keys = require('../api_keys.json')
+var api_keys = require('../api_keys.json')
 
 module.exports = {
     currency_convert: function (args, message) {
@@ -25,7 +25,7 @@ module.exports = {
                 }
             }
         } else {
-            message.channel.send('Converted: ' + res + ' ' + to);
+            message.channel.send('Invalid Syntax!');
         }
     }
 }

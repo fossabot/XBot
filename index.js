@@ -16,6 +16,7 @@ var nick = require('./discord/nick')
 var youtube = require('./api_magic/youtube')
 var reddit = require('./api_magic/reddit')
 var yandex = require('./api_magic/translate')
+var maps = require('./api_magic/maps')
 
 const client = new Discord.Client();
 
@@ -78,6 +79,9 @@ client.on('message', message => {
                 break;
             case 'translate':
                 yandex.translate(args, message);
+                break;
+            case 'maps':
+                maps.maps(args, message);
                 break;
         }
     }

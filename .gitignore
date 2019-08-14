@@ -92,3 +92,6 @@ typings/
 
 # The auth.json file
 /auth.json
+
+# API Keys
+/api_keys.json

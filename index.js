@@ -15,6 +15,7 @@ var nick = require('./discord/nick')
 
 var youtube = require('./api_magic/youtube')
 var reddit = require('./api_magic/reddit')
+var yandex = require('./api_magic/translate')
 
 const client = new Discord.Client();
 
@@ -74,6 +75,9 @@ client.on('message', message => {
                 break;
             case 'reddit':
                 reddit.reddit(args, message);
+                break;
+            case 'translate':
+                yandex.translate(args, message);
                 break;
         }
     }

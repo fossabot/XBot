@@ -1,6 +1,6 @@
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
-var api_keys = require('../api_keys.json')
+const api_keys = require('../api_keys.json')
 
 module.exports = {
     currency_convert: function (args, message) {

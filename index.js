@@ -1,6 +1,6 @@
-const Discord = require('discord.js')
-const logger = require('winston')
-const auth = require('./auth.json')
+var Discord = require('discord.js')
+var logger = require('winston')
+var auth = require('./auth.json')
 
 var currency = require('./productivity/currency_converter')
 var base = require('./productivity/base_converter')
@@ -12,6 +12,8 @@ var kick = require('./discord/kick')
 var avatar = require('./discord/avatar')
 var ban = require('./discord/ban')
 var nick = require('./discord/nick')
+
+var youtube = require('./api_magic/youtube')
 
 const client = new Discord.Client();
 
@@ -29,7 +31,7 @@ client.once('ready', () => {
 
 client.login(auth.token);
 
-const prefix = '!xb'
+var prefix = '!xb'
 
 client.on('message', message => {
     if (message.content.startsWith(prefix)) {
@@ -65,6 +67,9 @@ client.on('message', message => {
                 break;
             case 'nick':
                 nick.nick(args, message);
+                break;
+            case 'yt_search':
+                youtube.search(args, message);
                 break;
         }
     }

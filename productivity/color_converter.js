@@ -23,7 +23,7 @@ module.exports = {
             } else if (from == 'RGB' && to == 'HEX') {
                 v = v.replace('(', '');
                 v = v.replace(')', '');
-                v = v.replace(/\,/g, '');
+                v = v.replace(/,/g, '');
                 var res = '#';
                 var s = parseInt(v.substring(0, 3));
                 s = s.toString(16);

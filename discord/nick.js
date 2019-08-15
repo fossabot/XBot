@@ -10,7 +10,7 @@ module.exports = {
                 }).catch(err => {
                     message.reply('Failed to nickname the member');
                     console.error(err);
-                });;
+                });
             } else {
                 message.reply('That user is not in this server');
             }

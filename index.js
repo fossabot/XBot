@@ -12,10 +12,11 @@ const avatar = require('./discord/avatar');
 const ban = require('./discord/ban');
 const nick = require('./discord/nick');
 
-const youtube = require('./api_magic/youtube');
-const reddit = require('./api_magic/reddit');
-const yandex = require('./api_magic/translate');
-const maps = require('./api_magic/maps');
+const youtube = require('./integrations/youtube');
+const reddit = require('./integrations/reddit');
+const yandex = require('./integrations/translate');
+const maps = require('./integrations/maps');
+const urban = require('./integrations/urban');
 
 const client = new Discord.Client();
 
@@ -74,6 +75,9 @@ client.on('message', message => {
                 break;
             case 'maps':
                 maps.maps(args, message);
+                break;
+            case 'urban_dict':
+                urban.urban(args, message);
                 break;
         }
     }

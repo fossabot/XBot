@@ -2,30 +2,39 @@ module.exports = {
     base_convert: function (args, message) {
         if (args[3] == 'to') {
             var v = args[1];
+            var from, to;
             if (args[2] == 'BIN' || args[2] == 'OCT' || args[2] == 'DEC' || args[2] == 'HEX') {
                 switch (args[2]) {
                     case 'BIN':
-                        var from = 2;
+                        from = 2;
+                        break;
                     case 'OCT':
-                        var from = 8;
+                        from = 8;
+                        break;
                     case 'DEC':
-                        var from = 10;
+                        from = 10;
+                        break;
                     case 'HEX':
-                        var from = 16;
+                        from = 16;
+                        break;
                 }
                 switch (args[4]) {
                     case 'BIN':
-                        var to = 2;
+                        to = 2;
+                        break;
                     case 'OCT':
-                        var to = 8;
+                        to = 8;
+                        break;
                     case 'DEC':
-                        var to = 10;
+                        to = 10;
+                        break;
                     case 'HEX':
-                        var to = 16;
+                        to = 16;
+                        break;
                 }
             } else {
-                var from = parseFloat(args[2]);
-                var to = parseFloat(args[4]);
+                from = parseFloat(args[2]);
+                to = parseFloat(args[4]);
                 if (from < 2 || from > 32 || to < 2 || to > 32) {
                     message.channel.send('Invalid Syntax!');
                 }
@@ -36,4 +45,4 @@ module.exports = {
             message.channel.send('Invalid Syntax!');
         }
     }
-}
+};

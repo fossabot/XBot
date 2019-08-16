@@ -6,10 +6,11 @@ module.exports = {
             from.toUpperCase();
             var to = args[4];
             to.toUpperCase();
+            var res, s;
             if (from == 'HEX' && to == 'RGB') {
                 v = v.replace('#', '');
-                var res = '(';
-                var s = v.substring(0, 2);
+                res = '(';
+                s = v.substring(0, 2);
                 s = parseInt(s, 16);
                 res += (s + ',');
                 s = v.substring(2, 4);
@@ -24,8 +25,8 @@ module.exports = {
                 v = v.replace('(', '');
                 v = v.replace(')', '');
                 v = v.replace(/,/g, '');
-                var res = '#';
-                var s = parseInt(v.substring(0, 3));
+                res = '#';
+                s = parseInt(v.substring(0, 3));
                 s = s.toString(16);
                 res += s;
                 s = parseInt(v.substring(3, 6));
@@ -40,4 +41,4 @@ module.exports = {
             }
         }
     }
-}
+};

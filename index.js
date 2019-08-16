@@ -1,29 +1,29 @@
-var Discord = require('discord.js')
-var logger = require('winston')
-var auth = require('./auth.json')
+var Discord = require('discord.js');
+var logger = require('winston');
+var auth = require('./auth.json');
 
-var currency = require('./productivity/currency_converter')
-var base = require('./productivity/base_converter')
-var hash = require('./productivity/hash')
-var roman = require('./productivity/roman_converter')
-var color = require('./productivity/color_converter')
+var currency = require('./productivity/currency_converter');
+var base = require('./productivity/base_converter');
+var hash = require('./productivity/hash');
+var roman = require('./productivity/roman_converter');
+var color = require('./productivity/color_converter');
 
-var kick = require('./discord/kick')
-var avatar = require('./discord/avatar')
-var ban = require('./discord/ban')
-var nick = require('./discord/nick')
+var kick = require('./discord/kick');
+var avatar = require('./discord/avatar');
+var ban = require('./discord/ban');
+var nick = require('./discord/nick');
 
-var youtube = require('./api_magic/youtube')
-var reddit = require('./api_magic/reddit')
-var yandex = require('./api_magic/translate')
-var maps = require('./api_magic/maps')
+var youtube = require('./api_magic/youtube');
+var reddit = require('./api_magic/reddit');
+var yandex = require('./api_magic/translate');
+var maps = require('./api_magic/maps');
 
 const client = new Discord.Client();
 
 // Configure logger settings
 logger.remove(logger.transports.Console);
 logger.add(new logger.transports.Console, {
-    colorize: true
+    colorize: true,
 });
 logger.level = 'debug';
 
@@ -34,7 +34,7 @@ client.once('ready', () => {
 
 client.login(auth.token);
 
-var prefix = '!xb'
+var prefix = '!xb';
 
 client.on('message', message => {
     if (message.content.startsWith(prefix)) {

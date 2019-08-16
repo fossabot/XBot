@@ -18,4 +18,4 @@ module.exports = {
             message.reply('There is no user mentioned');
         }
     }
-}
+};

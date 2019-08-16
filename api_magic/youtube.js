@@ -1,14 +1,14 @@
-var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+var XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
 
-const api_keys = require('../api_keys.json')
+const api_keys = require('../api_keys.json');
 
 module.exports = {
     search: function (args, message) {
         args.splice(0, 1);
-        var s = args.join(" ");
+        var s = args.join(' ');
         var Http = new XMLHttpRequest();
         var url = 'https://www.googleapis.com/youtube/v3/search?q=' + s + '&part=snippet&maxResults=1&order=relevance&regionCode=US&safeSearch=moderate&key=' + api_keys.google;
-        Http.open("GET", url);
+        Http.open('GET', url);
         Http.send();
         Http.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
@@ -19,6 +19,6 @@ module.exports = {
                     message.channel.send('https://www.youtube.com/watch?v=' + Obj.items[0].id.videoId);
                 }
             }
-        }
+        };
     }
-}
+};

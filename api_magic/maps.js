@@ -1,7 +1,7 @@
 module.exports = {
     maps: function (args, message) {
         args.splice(0, 1);
-        var s = args.join("+");
+        var s = args.join('+');
         s = s.replace(/,/g, '%2C');
         s = s.replace(/\|/g, '%7C');
         s = s.replace(/"/g, '%22');
@@ -12,4 +12,4 @@ module.exports = {
         const url = 'https://www.google.com/maps/search/?api=1&query=' + s;
         message.channel.send(url);
     }
-}
+};

@@ -18,6 +18,7 @@ const yandex = require('./integrations/translate');
 const maps = require('./integrations/maps');
 const urban = require('./integrations/urban');
 const dict = require('./integrations/dictionary');
+const twitch = require('./integrations/twitch');
 
 const client = new Discord.Client();
 
@@ -83,6 +84,11 @@ client.on('message', message => {
             case 'dict':
                 dict.dictionary(args, message);
                 break;
+            case 'twitch':
+                twitch.twitch(args, message);
+                break;
+            default:
+                message.channel.send('Invalid Syntax!');
         }
     }
 });

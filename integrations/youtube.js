@@ -6,8 +6,8 @@ module.exports = {
     search: function (args, message) {
         args.splice(0, 1);
         var s = args.join(' ');
-        var Http = new XMLHttpRequest();
-        var url = 'https://www.googleapis.com/youtube/v3/search?q=' + s + '&part=snippet&maxResults=1&order=relevance&regionCode=US&safeSearch=moderate&key=' + api_keys.google;
+        const Http = new XMLHttpRequest();
+        const url = 'https://www.googleapis.com/youtube/v3/search?q=' + s + '&part=snippet&maxResults=1&order=relevance&regionCode=US&safeSearch=moderate&key=' + api_keys.google;
         Http.open('GET', url);
         Http.send();
         Http.onreadystatechange = function () {

@@ -17,6 +17,7 @@ const reddit = require('./integrations/reddit');
 const yandex = require('./integrations/translate');
 const maps = require('./integrations/maps');
 const urban = require('./integrations/urban');
+const dict = require('./integrations/dictionary');
 
 const client = new Discord.Client();
 
@@ -78,6 +79,9 @@ client.on('message', message => {
                 break;
             case 'urban_dict':
                 urban.urban(args, message);
+                break;
+            case 'dict':
+                dict.dictionary(args, message);
                 break;
         }
     }

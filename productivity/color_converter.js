@@ -26,13 +26,13 @@ module.exports = {
                 v = v.replace(')', '');
                 v = v.replace(/,/g, '');
                 res = '#';
-                s = parseInt(v.substring(0, 3));
+                s = parseInt(v.substring(0, 3), 10);
                 s = s.toString(16);
                 res += s;
-                s = parseInt(v.substring(3, 6));
+                s = parseInt(v.substring(3, 6), 10);
                 s = s.toString(16);
                 res += s;
-                s = parseInt(v.substring(6));
+                s = parseInt(v.substring(6), 10);
                 s = s.toString(16);
                 res += s;
                 message.channel.send('Converted: ' + res.toUpperCase());

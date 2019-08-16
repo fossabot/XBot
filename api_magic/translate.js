@@ -1,4 +1,4 @@
-var XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
+const XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
 
 const api_keys = require('../api_keys.json');
 

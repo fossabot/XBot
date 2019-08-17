@@ -90,5 +90,8 @@ typings/
 # VS Code directory
 .vscode/
 
+# The eslint configuration
+/.eslintrc.json
+
 # Credentials
 /credentials.json

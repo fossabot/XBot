@@ -10,6 +10,20 @@ module.exports = {
         var s = args.join('%20');
         message.channel.send('https://www.merriam-webster.com/dictionary/' + s);
     },
+    imgur: function (args, message) {
+        args.splice(0, 1);
+        var s = args.join(' ');
+        const Http = new XMLHttpRequest();
+        const url = 'https://api.imgur.com/3/gallery/search/relevance?q=' + s + '&client_id=' + credentials.oauth.imgur.client_id;
+        Http.open('GET', url);
+        Http.send();
+        Http.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                var Obj = JSON.parse(this.responseText);
+                message.channel.send(Obj.data[0].link);
+            }
+        };
+    },
     maps: function (args, message) {
         args.splice(0, 1);
         var s = args.join('+');
@@ -26,9 +40,9 @@ module.exports = {
     reddit: function (args, message) {
         const r = new snoowrap({
             userAgent: 'XBot',
-            clientId: credentials.api_keys.reddit.client_id,
-            clientSecret: credentials.api_keys.reddit.client_secret,
-            refreshToken: credentials.api_keys.reddit.refresh_token
+            clientId: credentials.oauth.reddit.client_id,
+            clientSecret: credentials.oauth.reddit.client_secret,
+            refreshToken: credentials.oauth.reddit.refresh_token
         });
         args.splice(0, 1);
         var s = args.join('%20');

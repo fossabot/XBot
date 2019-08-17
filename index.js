@@ -121,6 +121,13 @@ client.on('message', message => {
                         message.channel.send('This command is disabled!');
                     }
                     break;
+                case 'imgur':
+                    if (commands.imgur) {
+                        integrations.imgur(args, message);
+                    } else {
+                        message.channel.send('This command is disabled!');
+                    }
+                    break;
                 case 'maps':
                     if (commands.maps) {
                         integrations.maps(args, message);

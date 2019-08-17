@@ -1,13 +1,13 @@
 const XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
 
-const api_keys = require('../api_keys.json');
+const credentials = require('../credentials.json');
 
 module.exports = {
     search: function (args, message) {
         args.splice(0, 1);
         var s = args.join(' ');
         const Http = new XMLHttpRequest();
-        const url = 'https://www.googleapis.com/youtube/v3/search?q=' + s + '&part=snippet&maxResults=1&order=relevance&regionCode=US&safeSearch=moderate&key=' + api_keys.google;
+        const url = 'https://www.googleapis.com/youtube/v3/search?q=' + s + '&part=snippet&maxResults=1&order=relevance&regionCode=US&safeSearch=moderate&key=' + credentials.api_keys.youtube;
         Http.open('GET', url);
         Http.send();
         Http.onreadystatechange = function () {

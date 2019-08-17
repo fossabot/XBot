@@ -1,6 +1,6 @@
 const XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
 
-const api_keys = require('../api_keys.json');
+const credentials = require('../credentials.json');
 
 module.exports = {
     translate: function (args, message) {
@@ -12,7 +12,7 @@ module.exports = {
             args.splice(0, 4);
             var s = args.join(' ');
             const Http = new XMLHttpRequest();
-            const url = 'https://translate.yandex.net/api/v1.5/tr.json/translate?key=' + api_keys.yandex + '&text=' + s + '&lang=' + from + '-' + to;
+            const url = 'https://translate.yandex.net/api/v1.5/tr.json/translate?key=' + credentials.api_keys.yandex_translate + '&text=' + s + '&lang=' + from + '-' + to;
             Http.open('GET', url);
             Http.send();
             Http.onreadystatechange = function () {

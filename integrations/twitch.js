@@ -1,6 +1,6 @@
 const XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
 
-const api_keys = require('../api_keys.json');
+const credentials = require('../credentials.json');
 
 module.exports = {
     twitch: function (args, message) {
@@ -17,7 +17,7 @@ module.exports = {
                 s = s.replace(/#/g, '%23');
                 s = s.replace(/%/g, '%25');
                 const Http = new XMLHttpRequest();
-                const url = 'https://api.twitch.tv/kraken/search/channels?query=' + s + '&limit=1&client_id=' + api_keys.twitch;
+                const url = 'https://api.twitch.tv/kraken/search/channels?query=' + s + '&limit=1&client_id=' + credentials.api_keys.twitch;
                 Http.open('GET', url);
                 Http.send();
                 Http.onreadystatechange = function () {
@@ -39,7 +39,7 @@ module.exports = {
                 s = s.replace(/#/g, '%23');
                 s = s.replace(/%/g, '%25');
                 const Http = new XMLHttpRequest();
-                const url = 'https://api.twitch.tv/kraken/search/games?query=' + s + '&client_id=' + api_keys.twitch;
+                const url = 'https://api.twitch.tv/kraken/search/games?query=' + s + '&client_id=' + credentials.api_keys.twitch;
                 Http.open('GET', url);
                 Http.send();
                 Http.onreadystatechange = function () {
@@ -70,7 +70,7 @@ module.exports = {
                 s = s.replace(/#/g, '%23');
                 s = s.replace(/%/g, '%25');
                 const Http = new XMLHttpRequest();
-                const url = 'https://api.twitch.tv/kraken/search/streams?query=' + s + '&limit=1&client_id=' + api_keys.twitch;
+                const url = 'https://api.twitch.tv/kraken/search/streams?query=' + s + '&limit=1&client_id=' + credentials.api_keys.twitch;
                 Http.open('GET', url);
                 Http.send();
                 Http.onreadystatechange = function () {

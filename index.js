@@ -1,8 +1,7 @@
 const Discord = require('discord.js');
 const mysql = require('mysql');
 
-const auth = require('./auth.json');
-const mysql_auth = require('./mysql_auth.json');
+const credentials = require('./credentials.json');
 
 const currency = require('./productivity/currency_converter');
 const base = require('./productivity/base_converter');
@@ -30,12 +29,12 @@ client.once('ready', () => {
     console.log('Ready!');
 });
 
-client.login(auth.token);
+client.login(credentials.bot_token);
 
 var con = mysql.createConnection({
     host: 'localhost',
-    user: mysql_auth.user,
-    password: mysql_auth.password,
+    user: credentials.mysql.user,
+    password: credentials.mysql.password,
     database: 'XBot'
 });
 

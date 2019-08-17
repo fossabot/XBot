@@ -90,11 +90,5 @@ typings/
 # VS Code directory
 .vscode/
 
-# The auth.json file
-/auth.json
-
-# API Keys
-/api_keys.json
-
-# MySQL Credentials
-/mysql_auth.json
+# Credentials
+/credentials.json

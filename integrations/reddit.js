@@ -1,13 +1,13 @@
 'use strict';
 const snoowrap = require('snoowrap');
 
-const api_keys = require('../api_keys.json');
+const credentials = require('../credentials.json');
 
 const r = new snoowrap({
-    userAgent: 'xbot',
-    clientId: api_keys.reddit.clientId,
-    clientSecret: api_keys.reddit.clientSecret,
-    refreshToken: api_keys.reddit.refreshToken
+    userAgent: 'XBot',
+    clientId: credentials.api_keys.reddit.client_id,
+    clientSecret: credentials.api_keys.reddit.client_secret,
+    refreshToken: credentials.api_keys.reddit.refresh_token
 });
 
 module.exports = {

@@ -95,3 +95,6 @@ typings/
 
 # API Keys
 /api_keys.json
+
+# MySQL Credentials
+/mysql_auth.json

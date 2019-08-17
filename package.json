@@ -1,7 +1,7 @@
 {
   "name": "xbot",
   "version": "1.0.0",
-  "description": "TODO",
+  "description": "A Useful Discord Bot",
   "main": "index.js",
   "author": "Paul Soporan",
   "license": "GNU Lesser General Public License v3.0",

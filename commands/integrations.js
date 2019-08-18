@@ -1,5 +1,6 @@
 'use strict';
 const XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
+const request = require('request');
 const snoowrap = require('snoowrap');
 
 const credentials = require('../credentials.json');
@@ -71,6 +72,21 @@ module.exports = {
         } else {
             message.channel.send('https://www.reddit.com/search/?q=' + s);
         }
+    },
+    stackov: function (args, message) {
+        args.splice(0, 1);
+        var s = args.join(' ');
+        const url = 'https://api.stackexchange.com/2.2/search?pagesize=1&order=desc&sort=relevance&intitle=' + s + '&site=stackoverflow';
+        request.get({
+            url: url,
+            headers: {
+                'accept-encoding': 'gzip'
+            },
+            gzip: true
+        }, function (error, response, body) {
+            var Obj = JSON.parse(body);
+            message.channel.send(Obj.items[0].link);
+        });
     },
     translate: function (args, message) {
         if (args[2] == 'to') {

@@ -10,6 +10,20 @@ module.exports = {
         var s = args.join('%20');
         message.channel.send('https://www.merriam-webster.com/dictionary/' + s);
     },
+    imdb: function (args, message) {
+        args.splice(0, 1);
+        var s = args.join('%20');
+        const Http = new XMLHttpRequest();
+        const url = 'http://www.omdbapi.com/?apikey=' + credentials.api_keys.omdb + '&s=' + s;
+        Http.open('GET', url);
+        Http.send();
+        Http.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                var Obj = JSON.parse(this.responseText);
+                message.channel.send('https://www.imdb.com/title/' + Obj.Search[0].imdbID);
+            }
+        };
+    },
     imgur: function (args, message) {
         args.splice(0, 1);
         var s = args.join(' ');

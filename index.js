@@ -55,8 +55,8 @@ client.on('message', message => {
             kick: 1,
             nick: 1,
             ping: 1,
-            slap: 1,
             dict: 1,
+            imdb: 1,
             imgur: 1,
             maps: 1,
             reddit: 1,
@@ -117,6 +117,13 @@ client.on('message', message => {
                 case 'dict':
                     if (commands.dict) {
                         integrations.dict(args, message);
+                    } else {
+                        message.channel.send('This command is disabled!');
+                    }
+                    break;
+                case 'imdb':
+                    if (commands.imdb) {
+                        integrations.imdb(args, message);
                     } else {
                         message.channel.send('This command is disabled!');
                     }

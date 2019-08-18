@@ -1,6 +1,5 @@
 const Discord = require('discord.js');
 const mysql = require('mysql');
-const RateLimiter = require('limiter').RateLimiter;
 
 const credentials = require('./credentials.json');
 
@@ -152,13 +151,13 @@ client.on('message', message => {
                         message.channel.send('This command is disabled!');
                     }
                     break;
-                    case 'stackov':
-                        if (commands.stackov) {
-                            integrations.stackov(args, message);
-                        } else {
-                            message.channel.send('This command is disabled!');
-                        }
-                        break;
+                case 'stackov':
+                    if (commands.stackov) {
+                        integrations.stackov(args, message);
+                    } else {
+                        message.channel.send('This command is disabled!');
+                    }
+                    break;
                 case 'translate':
                     if (commands.translate) {
                         integrations.translate(args, message);
@@ -182,10 +181,7 @@ client.on('message', message => {
                     break;
                 case 'weather':
                     if (commands.weather) {
-                        var limiter = new RateLimiter(60, 'minute');
-                        limiter.removeTokens(1, function () {
-                            integrations.weather(args, message);
-                        });
+                        integrations.weather(args, message);
                     } else {
                         message.channel.send('This command is disabled!');
                     }

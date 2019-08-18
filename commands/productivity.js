@@ -1,4 +1,5 @@
 const XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
+const math = require('mathjs');
 
 const credentials = require('../credentials.json');
 
@@ -75,6 +76,22 @@ module.exports = {
             message.channel.send('Converted: ' + v.toString(to));
         } else {
             message.channel.send('Invalid Syntax!');
+        }
+    },
+    calc: function (args, message) {
+        args.splice(0, 1);
+        var s = args.join(' ');
+        var res = math.evaluate(s);
+        if (typeof res != 'object') {
+            message.channel.send(res);
+        } else if (Object.prototype.hasOwnProperty.call(res, 're')) {
+            if(res.re) {
+                message.channel.send(res.re + ' + ' + res.im + 'i');
+            } else {
+                message.channel.send(res.im + 'i');
+            }
+        } else if (Object.prototype.hasOwnProperty.call(res, 'value')) {
+            message.channel.send(math.chain(res.value).multiply(100).value);
         }
     },
     color: function (args, message) {

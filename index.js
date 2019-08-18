@@ -177,6 +177,13 @@ client.on('message', message => {
                         message.channel.send('This command is disabled!');
                     }
                     break;
+                case 'calc':
+                    if (commands.calc) {
+                        productivity.calc(args, message);
+                    } else {
+                        message.channel.send('This command is disabled!');
+                    }
+                    break;
                 case 'color':
                     if (commands.color) {
                         productivity.color(args, message);

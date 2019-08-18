@@ -1,6 +1,6 @@
 const Discord = require('discord.js');
 const mysql = require('mysql');
-var RateLimiter = require('limiter').RateLimiter;
+const RateLimiter = require('limiter').RateLimiter;
 
 const credentials = require('./credentials.json');
 

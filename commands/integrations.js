@@ -1,4 +1,5 @@
 'use strict';
+const Discord = require('discord.js');
 const XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
 const request = require('request');
 const snoowrap = require('snoowrap');
@@ -210,6 +211,44 @@ module.exports = {
             if (this.readyState == 4 && this.status == 200) {
                 var Obj = JSON.parse(this.responseText);
                 message.channel.send(Obj.list[0].permalink);
+            }
+        };
+    },
+    weather: function (args, message) {
+        args.splice(0, 1);
+        var s = args.join('%20');
+        const Http = new XMLHttpRequest();
+        const url = 'https://api.openweathermap.org/data/2.5/weather?q=' + s + '&units=metric&APPID=' + credentials.api_keys.open_weather;
+        Http.open('GET', url);
+        Http.send();
+        Http.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                var Obj = JSON.parse(this.responseText);
+                var sunrise = new Date(parseInt(Obj.sys.sunrise, 10) * 1000 + Obj.timezone / 1000);
+                var sunrise_hour = sunrise.getHours();
+                var sunrise_minute = '' + sunrise.getMinutes();
+                var sunset = new Date(parseInt(Obj.sys.sunset, 10) * 1000 + Obj.timezone / 1000);
+                var sunset_hour = sunset.getHours();
+                var sunset_minute = '' + sunset.getMinutes();
+                const current_weather = new Discord.RichEmbed()
+                    .setColor('#fcb103')
+                    .attachFiles(['./assets/images/open_weather_logo.png'])
+                    .setAuthor('Open Weather', 'attachment://open_weather_logo.png', 'https://openweathermap.org/')
+                    .setThumbnail('http://openweathermap.org/img/wn/' + Obj.weather[0].icon + '@2x.png')
+                    .setTitle('Weather in ' + Obj.name + ', ' + Obj.sys.country)
+                    .setDescription(Obj.main.temp + '°C')
+                    .setURL('https://openweathermap.org/city/' + Obj.id)
+                    .addField(Obj.weather[0].main, Obj.weather[0].description)
+                    .addField('Wind: ', 'Speed = ' + Obj.wind.speed + ' meters/sec, Direction = ' + Obj.wind.deg + '°', true)
+                    .addField('Cloudiness: ', Obj.clouds.all + '%', true)
+                    .addField('Pressure: ', Obj.main.pressure + ' hPa', true)
+                    .addField('Humidity: ', Obj.main.humidity + '%', true)
+                    .addField('Sunrise: ', sunrise_hour + ':' + sunrise_minute.substring(-2), true)
+                    .addField('Sunset: ', sunset_hour + ':' + sunset_minute.substring(-2), true)
+                    .addField('Geo Coordinates:', 'Lat: ' + Obj.coord.lat + ', Lon: ' + Obj.coord.lon, true)
+                    .setTimestamp()
+                    .setFooter('Data from: https://openweathermap.org', 'attachment://open_weather_logo.png');
+                message.channel.send(current_weather);
             }
         };
     },

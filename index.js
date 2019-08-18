@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const mysql = require('mysql');
+var RateLimiter = require('limiter').RateLimiter;
 
 const credentials = require('./credentials.json');
 
@@ -64,6 +65,7 @@ client.on('message', message => {
             translate: 1,
             twitch: 1,
             urban: 1,
+            weather: 1,
             yt: 1,
             base: 1,
             calc: 1,
@@ -174,6 +176,16 @@ client.on('message', message => {
                 case 'urban':
                     if (commands.urban) {
                         integrations.urban(args, message);
+                    } else {
+                        message.channel.send('This command is disabled!');
+                    }
+                    break;
+                case 'weather':
+                    if (commands.weather) {
+                        var limiter = new RateLimiter(60, 'minute');
+                        limiter.removeTokens(1, function () {
+                            integrations.weather(args, message);
+                        });
                     } else {
                         message.channel.send('This command is disabled!');
                     }

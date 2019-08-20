@@ -83,7 +83,7 @@ client.on('message', message => {
             switch (args[0]) {
                 case 'avatar':
                     if (commands.avatar) {
-                        discord.avatar(message);
+                        discord.avatar(args, message);
                     } else {
                         message.channel.send('This command is disabled!');
                     }

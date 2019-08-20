@@ -28,14 +28,18 @@ var con = mysql.createConnection({
 var sql;
 
 client.on('guildCreate', guild => {
-    sql = 'INSERT INTO servers (id, prefix, disabled) VALUES (\'' + guild.id + '\', \'!xb\', \'\')';
+    sql = 'INSERT INTO ?? (??, ??, ??) VALUES (?, \'!x\', \'\')';
+    var inserts = ['servers', 'id', 'prefix', 'disabled', guild.id];
+    sql = mysql.format(sql, inserts);
     con.query(sql, function (err) {
         if (err) throw err;
     });
 });
 
 client.on('guildDelete', guild => {
-    sql = 'DELETE FROM servers WHERE id = \'' + guild.id + '\'';
+    sql = 'DELETE FROM ?? WHERE id = ?';
+    var inserts = ['servers', guild.id];
+    sql = mysql.format(sql, inserts);
     con.query(sql, function (err) {
         if (err) throw err;
     });
@@ -43,7 +47,9 @@ client.on('guildDelete', guild => {
 
 client.on('message', message => {
     if (!message.guild) return;
-    sql = 'SELECT prefix, disabled FROM servers WHERE id = \'' + message.guild.id + '\'';
+    sql = 'SELECT ??, ?? FROM ?? WHERE id = ?';
+    var inserts = ['prefix', 'disabled', 'servers', message.guild.id];
+    sql = mysql.format(sql, inserts);
     con.query(sql, function (err, result) {
         if (err) throw err;
         var pref = result[0].prefix;
@@ -72,6 +78,8 @@ client.on('message', message => {
             currency: 1,
             hash: 1,
             roman: 1,
+            disable: 1,
+            enable: 1,
             help: 1,
             prefix: 1
         };
@@ -111,7 +119,7 @@ client.on('message', message => {
                     break;
                 case 'ping':
                     if (commands.ping) {
-                        fun.ping(message);
+                        fun.ping(args, message);
                     } else {
                         message.channel.send('This command is disabled!');
                     }
@@ -236,14 +244,14 @@ client.on('message', message => {
                     }
                     break;
                 case 'disable':
-                    utility.disable(args, message, con, disabled_string);
+                    utility.disable(args, message, con, disabled_string, commands);
                     break;
                 case 'enable':
-                    utility.enable(args, message, con, disabled_string);
+                    utility.enable(args, message, con, disabled_string, commands);
                     break;
                 case 'help':
                     if (commands.help) {
-                        utility.help(message);
+                        utility.help(args, message);
                     } else {
                         message.channel.send('This command is disabled!');
                     }

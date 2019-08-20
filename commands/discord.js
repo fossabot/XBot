@@ -6,7 +6,7 @@ module.exports = {
         } else if (args.length == 1) {
             message.reply('This is your avatar: ' + message.author.avatarURL);
         } else {
-            message.channel.send('Invalid Syntax! Try:\n`avatar {user mention}` for a user\'s avatar\nor\n`avatar` for your own avatar');
+            message.channel.send('Invalid Syntax! Try:\n`avatar {user mention}` to display a user\'s avatar\nor\n`avatar` to display your own avatar');
         }
     },
     ban: function (message) {

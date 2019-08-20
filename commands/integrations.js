@@ -187,9 +187,15 @@ module.exports = {
             var sunrise = new Date(parseInt(Obj.sys.sunrise, 10) * 1000 + Obj.timezone / 1000);
             var sunrise_hour = sunrise.getHours();
             var sunrise_minute = '' + sunrise.getMinutes();
+            if(sunrise_minute.length == 1) {
+                sunrise_minute = '0' + sunrise_minute;
+            }
             var sunset = new Date(parseInt(Obj.sys.sunset, 10) * 1000 + Obj.timezone / 1000);
             var sunset_hour = sunset.getHours();
             var sunset_minute = '' + sunset.getMinutes();
+            if (sunset_minute.length == 1) {
+                sunset_minute = '0' + sunset_minute;
+            }
             const current_weather = new Discord.RichEmbed()
                 .setColor('#fcb103')
                 .attachFiles(['./assets/images/open_weather_logo.png'])
@@ -203,8 +209,8 @@ module.exports = {
                 .addField('Cloudiness: ', Obj.clouds.all + '%', true)
                 .addField('Pressure: ', Obj.main.pressure + ' hPa', true)
                 .addField('Humidity: ', Obj.main.humidity + '%', true)
-                .addField('Sunrise: ', sunrise_hour + ':' + sunrise_minute.substring(-2), true)
-                .addField('Sunset: ', sunset_hour + ':' + sunset_minute.substring(-2), true)
+                .addField('Sunrise: ', sunrise_hour + ':' + sunrise_minute, true)
+                .addField('Sunset: ', sunset_hour + ':' + sunset_minute, true)
                 .addField('Geo Coordinates:', 'Lat: ' + Obj.coord.lat + ', Lon: ' + Obj.coord.lon, true)
                 .setTimestamp()
                 .setFooter('Data from: https://openweathermap.org', 'attachment://open_weather_logo.png');

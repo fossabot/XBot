@@ -178,14 +178,16 @@ module.exports = {
       I: 1,
     };
     const is_roman = [...args[1]].every((char) => Object.prototype.hasOwnProperty.call(roman_to_decimal, char));
-    if (is_roman) {
+    if (args.length > 2) {
+      message.channel.send('Invalid Syntax! Try:\n`roman {roman numeral | decimal number}` to convert between roman numerals and decimal numbers (the type is auto-detected)');
+    } else if (is_roman) {
       const s = args[1];
       let val = 0;
       for (let i = 0; i < s.length - 1; ++i)
         if (roman_to_decimal[s[i]] >= roman_to_decimal[s[i + 1]]) val += roman_to_decimal[s[i]];
         else val -= roman_to_decimal[s[i]];
       val += roman_to_decimal[s[s.length - 1]];
-      message.channel.send(`Converted:\n\`${val}\``);
+      message.channel.send(`Converted to a decimal number:\n\`${val}\``);
     } else if (isNaN(args[1])) {
       message.channel.send('Invalid Syntax! Try:\n`roman {roman numeral | decimal number}` to convert between roman numerals and decimal numbers (the type is auto-detected)');
     } else {
@@ -201,7 +203,7 @@ module.exports = {
         } else {
           ++i;
         }
-      message.channel.send(`Converted:\n\`${res}\``);
+      message.channel.send(`Converted to a roman numeral:\n\`${res}\``);
     }
   },
 };

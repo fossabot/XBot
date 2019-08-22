@@ -55,13 +55,19 @@ module.exports = {
     }
   },
   calc (args, message) {
-    args.splice(0, 1);
+    args.splice(0, 1).join(' ');
     const s = args.join(' ');
-    const res = math.evaluate(s);
+    let res;
+    try {
+      res = math.evaluate(s);
+    } catch (err) {
+      message.channel.send('Invalid Syntax! Try:\n`calc {math expression}` to evaluate a mathematical expression\n**A valid expression must use this expression syntax:**\nhttps://mathjs.org/docs/expressions/syntax.html');
+    }
     if (typeof res != 'object') message.channel.send(res);
     else if (Object.prototype.hasOwnProperty.call(res, 're'))
       if (res.re) message.channel.send(`${res.re} + ${res.im}i`);
-      else message.channel.send(`${res.im}i`);
+      else if (res.im > 1) message.channel.send(`${res.im}i`);
+      else message.channel.send('i');
     else if (Object.prototype.hasOwnProperty.call(res, 'value'))
       message.channel.send(math.chain(res.value).multiply(100).value);
   },

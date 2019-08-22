@@ -21,9 +21,8 @@ module.exports = {
             .then(() => {
               message.reply(`Successfully banned ${user.tag}`);
             })
-            .catch((err) => {
+            .catch(() => {
               message.reply(`Failed to ban ${user.tag}`);
-              console.error(err);
             });
         } else {
           message.reply('You don\'t have the necessary permissions!');
@@ -45,9 +44,8 @@ module.exports = {
             .then(() => {
               message.reply(`Successfully kicked ${user.tag}`);
             })
-            .catch((err) => {
+            .catch(() => {
               message.reply(`Failed to kick ${user.tag}`);
-              console.error(err);
             });
         } else {
           message.reply('You don\'t have the necessary permissions!');
@@ -69,9 +67,8 @@ module.exports = {
             .then(() => {
               message.reply(`Successfully nicknamed ${user.tag}`);
             })
-            .catch((err) => {
+            .catch(() => {
               message.reply(`Failed to nickname ${user.tag}`);
-              console.error(err);
             });
         } else {
           message.reply('You don\'t have the necessary permissions!');

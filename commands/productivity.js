@@ -1,3 +1,4 @@
+const Discord = require('discord.js');
 const request = require('request');
 const math = require('mathjs');
 
@@ -103,37 +104,48 @@ module.exports = {
             to.toUpperCase();
             var res, s;
             if (from == 'HEX' && to == 'RGB') {
-                v = v.replace('#', '');
-                res = '(';
-                s = v.substring(0, 2);
-                s = parseInt(s, 16);
-                res += (s + ',');
-                s = v.substring(2, 4);
-                s = parseInt(s, 16);
-                res += (s + ',');
-                s = v.substring(4);
-                s = parseInt(s, 16);
-                res += s;
-                res += ')';
-                message.channel.send('Converted: ' + res);
+                if (v[0] != '#' || !([3, 4, 6, 8].indexOf(v.substring(1).length) > -1 && !isNaN(parseInt(v.substring(1), 16)))) {
+                    message.channel.send('Invalid Syntax! HEX values must start with `#` and must only contain hexadecimal characters!');
+                } else {
+                    v = v.substring(1);
+                    res = 'rgb(';
+                    s = v.substring(0, 2);
+                    s = parseInt(s, 16);
+                    res += (s + ',');
+                    s = v.substring(2, 4);
+                    s = parseInt(s, 16);
+                    res += (s + ',');
+                    s = v.substring(4);
+                    s = parseInt(s, 16);
+                    res += s;
+                    res += ')';
+                    message.channel.send('Converted:\n`' + res + '`');
+                }
             } else if (from == 'RGB' && to == 'HEX') {
-                v = v.replace('(', '');
-                v = v.replace(')', '');
-                v = v.replace(/,/g, '');
-                res = '#';
-                s = parseInt(v.substring(0, 3), 10);
-                s = s.toString(16);
-                res += s;
-                s = parseInt(v.substring(3, 6), 10);
-                s = s.toString(16);
-                res += s;
-                s = parseInt(v.substring(6), 10);
-                s = s.toString(16);
-                res += s;
-                message.channel.send('Converted: ' + res.toUpperCase());
+                if (!(/^(rgb|hsl)(a?)[(]\s*([\d.]+\s*%?)\s*,\s*([\d.]+\s*%?)\s*,\s*([\d.]+\s*%?)\s*(?:,\s*([\d.]+)\s*)?[)]$/.test(v))) {
+                    message.channel.send('Invalid Syntax! RGB values must start with `rgb`, must be contained between `()`, and must only use 8 bit values divided by commas without spaces!');
+                } else {
+                    v = v.substring(3);
+                    v = v.replace('(', '');
+                    v = v.replace(')', '');
+                    v = v.replace(/,/g, '');
+                    res = '#';
+                    s = parseInt(v.substring(0, 3), 10);
+                    s = s.toString(16);
+                    res += s;
+                    s = parseInt(v.substring(3, 6), 10);
+                    s = s.toString(16);
+                    res += s;
+                    s = parseInt(v.substring(6), 10);
+                    s = s.toString(16);
+                    res += s;
+                    message.channel.send('Converted:\n`' + res.toUpperCase() + '`');
+                }
             } else {
-                message.channel.send('Invalid Syntax!');
+                message.channel.send('Invalid Syntax! Try:\n`color {value} {format} to {format} to` to convert a color value from HEX to RGB and vice-versa');
             }
+        } else {
+            message.channel.send('Invalid Syntax! Try:\n`color {value} {format} to {format} to` to convert a color value from HEX to RGB and vice-versa');
         }
     },
     currency: function (args, message) {
@@ -157,9 +169,25 @@ module.exports = {
         }
     },
     hash: function (args, message) {
-        args.splice(0, 1);
-        var s = args.join(' ');
-        message.channel.send('Hashed `' + s + '` :\n' + '```md5: ' + md5(s) + '\n' + 'sha1: ' + sha1(s) + '\n' + 'sha256: ' + sha256(s) + '```');
+        if (args.length > 1) {
+            args.splice(0, 1);
+            var s = args.join(' ');
+            const hashes = new Discord.RichEmbed()
+                .setColor('#0000ff')
+                .attachFiles(['./assets/images/icon.png'])
+                .setAuthor('XBot', 'attachment://icon.png', 'https://github.com/paul-soporan/XBot')
+                .setTitle('Hashed:')
+                .setDescription('`' + s + '`')
+                .setURL()
+                .addField('md5:', md5(s))
+                .addField('sha1:', sha1(s))
+                .addField('sha256:', sha256(s))
+                .setTimestamp()
+                .setFooter('Hashed using: https://github.com/jbt/tiny-hashes');
+            message.channel.send(hashes);
+        } else {
+            message.channel.send('Invalid Syntax! You didn\'t provide anything to hash. Try:\n`hash {string}` to hash a sequence of characters(can contain spaces) using md5, sha1 and sha256');
+        }
     },
     roman: function (args, message) {
         var s, i;

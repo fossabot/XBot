@@ -2,9 +2,10 @@ const mysql = require('mysql');
 
 module.exports = {
   disable (args, message, con, disabled_string, commands) {
+    args[1] = args[1].toLowerCase();
     if (args.length != 2)
       message.channel.send('Invalid Syntax! Try:\n`disable {command}` to disable a command');
-    else if (args[1].toLowerCase() == 'enable' || args[1] == 'disable')
+    else if (args[1] == 'enable' || args[1] == 'disable')
       message.channel.send('`enable` and `disable` can\'t be disabled!');
     else if (!Object.prototype.hasOwnProperty.call(commands, args[1]))
       message.channel.send('Please enter a valid command!');
@@ -23,9 +24,10 @@ module.exports = {
     else message.channel.send('You don\'t have the necessary permissions!');
   },
   enable (args, message, con, disabled_string, commands) {
+    args[1] = args[1].toLowerCase();
     if (args.length != 2)
       message.channel.send('Invalid Syntax! Try:\n`enable {command}` to enable a command');
-    else if (args[1].toLowerCase() == 'enable' || args[1] == 'disable')
+    else if (args[1] == 'enable' || args[1] == 'disable')
       message.channel.send('`enable` and `disable` can\'t be enabled!');
     else if (!Object.prototype.hasOwnProperty.call(commands, args[1]))
       message.channel.send('Please enter a valid command!');

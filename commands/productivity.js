@@ -1,3 +1,4 @@
+/* eslint-disable sort-keys */
 const Discord = require('discord.js');
 const request = require('request');
 const math = require('mathjs');
@@ -5,30 +6,6 @@ const math = require('mathjs');
 const credentials = require('../credentials.json');
 
 const {md5, sha1, sha256} = require('tiny-hashes');
-
-// eslint-disable-next-line consistent-return
-const roman_to_decimal = function roman_to_decimal (c) {
-  // eslint-disable-next-line default-case
-  switch (c) {
-    case 'M':
-      return 1000;
-    case 'D':
-      return 500;
-    case 'C':
-      return 100;
-    case 'L':
-      return 50;
-    case 'X':
-      return 10;
-    case 'V':
-      return 5;
-    case 'I':
-      return 1;
-  }
-};
-
-const decimal_value = [1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1];
-const roman_value = ['M', 'CM', 'D', 'CD', 'C', 'XC', 'L', 'XL', 'X', 'IX', 'V', 'IV', 'I'];
 
 module.exports = {
   base (args, message) {
@@ -191,19 +168,32 @@ module.exports = {
     }
   },
   roman (args, message) {
-    let i, s;
-    if (args[1][0] >= 'A') {
-      s = args[1];
+    const roman_to_decimal = {
+      M: 1000,
+      D: 500,
+      C: 100,
+      L: 50,
+      X: 10,
+      V: 5,
+      I: 1,
+    };
+    const is_roman = [...args[1]].every((char) => Object.prototype.hasOwnProperty.call(roman_to_decimal, char));
+    if (is_roman) {
+      const s = args[1];
       let val = 0;
-      for (i = 0; i < s.length - 1; ++i)
-        if (roman_to_decimal(s[i]) >= roman_to_decimal(s[i + 1])) val += roman_to_decimal(s[i]);
-        else val -= roman_to_decimal(s[i]);
-      val += roman_to_decimal(s[s.length - 1]);
-      message.channel.send(`Converted: ${val}`);
+      for (let i = 0; i < s.length - 1; ++i)
+        if (roman_to_decimal[s[i]] >= roman_to_decimal[s[i + 1]]) val += roman_to_decimal[s[i]];
+        else val -= roman_to_decimal[s[i]];
+      val += roman_to_decimal[s[s.length - 1]];
+      message.channel.send(`Converted:\n\`${val}\``);
+    } else if (isNaN(args[1])) {
+      message.channel.send('Invalid Syntax! Try:\n`roman {roman numeral | decimal number}` to convert between roman numerals and decimal numbers (the type is auto-detected)');
     } else {
-      s = parseInt(args[1], 10);
+      const decimal_value = [1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1];
+      const roman_value = ['M', 'CM', 'D', 'CD', 'C', 'XC', 'L', 'XL', 'X', 'IX', 'V', 'IV', 'I'];
+      let s = parseInt(args[1], 10);
       let res = '';
-      i = 0;
+      let i = 0;
       while (s)
         if (s >= decimal_value[i]) {
           s -= decimal_value[i];
@@ -211,7 +201,7 @@ module.exports = {
         } else {
           ++i;
         }
-      message.channel.send(`Converted: ${res}`);
+      message.channel.send(`Converted:\n\`${res}\``);
     }
   },
 };

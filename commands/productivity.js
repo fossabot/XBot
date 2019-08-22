@@ -66,62 +66,38 @@ module.exports = {
       message.channel.send(math.chain(res.value).multiply(100).value);
   },
   color (args, message) {
-    if (args[3] == 'to') {
-      let v = args[1];
-      let from = args[2];
-      from = from.toUpperCase();
-      let to = args[4];
-      to = to.toUpperCase();
-      let res, s;
-      if (from == 'HEX' && to == 'RGB')
-        if (
-          v[0] != '#'
-          || !(
-            [3, 4, 6, 8].indexOf(v.substring(1).length) > -1 && !isNaN(parseInt(v.substring(1), 16))
-          )
-        ) {
-          message.channel.send('Invalid Syntax! HEX values must start with `#` and must only contain hexadecimal characters!');
-        } else {
-          v = v.substring(1);
-          res = 'rgb(';
-          s = v.substring(0, 2);
-          s = parseInt(s, 16);
-          res += `${s},`;
-          s = v.substring(2, 4);
-          s = parseInt(s, 16);
-          res += `${s},`;
-          s = v.substring(4);
-          s = parseInt(s, 16);
-          res += s;
-          res += ')';
-          message.channel.send(`Converted:\n\`${res}\``);
-        }
-      else if (from == 'RGB' && to == 'HEX')
-        if (
-          (/^(rgb|hsl)(a?)[(]\s*([\d.]+\s*%?)\s*,\s*([\d.]+\s*%?)\s*,\s*([\d.]+\s*%?)\s*(?:,\s*([\d.]+)\s*)?[)]$/u).test(v)
-        ) {
-          v = v.substring(3);
-          v = v.replace('(', '');
-          v = v.replace(')', '');
-          v = v.replace(/,/gu, '');
-          res = '#';
-          s = parseInt(v.substring(0, 3), 10);
-          s = s.toString(16);
-          res += s;
-          s = parseInt(v.substring(3, 6), 10);
-          s = s.toString(16);
-          res += s;
-          s = parseInt(v.substring(6), 10);
-          s = s.toString(16);
-          res += s;
-          message.channel.send(`Converted:\n\`${res.toUpperCase()}\``);
-        } else {
-          message.channel.send('Invalid Syntax! RGB values must start with `rgb`, must be contained between `()`, and must only use 8 bit values divided by commas without spaces!');
-        }
-      else
-        message.channel.send('Invalid Syntax! Try:\n`color {value} {format} to {format} to` to convert a color value from HEX to RGB and vice-versa');
+    let v = args[1];
+    if (args.length > 2) {
+      message.channel.send('Invalid Syntax! Try:\n`color {HEX value | RGB value}` to convert a color value between HEX and RGB (the type is auto-detected)');
+    } else if (v[0] === '#' && ([3, 4, 6, 8].indexOf(v.substring(1).length) > -1 && !isNaN(parseInt(v.substring(1), 16)))) {
+      v = v.substring(1);
+      let res = 'rgb(';
+      let s = parseInt(v.substring(0, 2), 16);
+      res += `${s},`;
+      s = parseInt(v.substring(2, 4), 16);
+      res += `${s},`;
+      s = parseInt(v.substring(4), 16);
+      res += `${s})`;
+      message.channel.send(`Converted to RGB:\n\`${res}\``);
+    } else if (
+      (/^(rgb|hsl)(a?)[(]\s*([\d.]+\s*%?)\s*,\s*([\d.]+\s*%?)\s*,\s*([\d.]+\s*%?)\s*(?:,\s*([\d.]+)\s*)?[)]$/u).test(v)
+    ) {
+      v = v
+        .substring(3)
+        .replace('(', '')
+        .replace(')', '')
+        .replace(/,/gu, '');
+      let res = '#';
+      let s = parseInt(v.substring(0, 3), 10).toString(16);
+      res += s;
+      s = parseInt(v.substring(3, 6), 10).toString(16);
+      res += s;
+      s = parseInt(v.substring(6), 10).toString(16);
+      res += s;
+      res = res.toUpperCase();
+      message.channel.send(`Converted to HEX:\n\`${res}\``);
     } else {
-      message.channel.send('Invalid Syntax! Try:\n`color {value} {format} to {format} to` to convert a color value from HEX to RGB and vice-versa');
+      message.channel.send('Invalid Syntax! Try:\n`color {HEX value | RGB value}` to convert a color value between HEX[e.g. #FFFFFF] and RGB[e.g. rgb(255,255,255)] (the type is auto-detected)');
     }
   },
   currency (args, message) {

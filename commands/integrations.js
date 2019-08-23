@@ -107,7 +107,7 @@ module.exports = {
     });
     const allTime = '-hour|-day|-week|-month|-year|-all';
     if (args.length == 1) {
-      message.channel.send('Invalid Syntax! Try:\n`reddit -rand {r/subredditName}`\n`reddit {-hot | -new | -rising} {r/subredditName}`\n`reddit {-top | -controversial} {[OPTIONAL] -hour | -day | -week | -month | -year | -all (default)} {r/subredditName}`\n`reddit sub {r/subredditName}`\n`reddit search {search term}`');
+      message.channel.send('Invalid Syntax! Try:\n`reddit -rand {r/subredditName} to display a random submission from a subreddit`\n`reddit {-hot | -new | -rising} {r/subredditName} to display the newest, hottest or most rising submission from a subreddit`\n`reddit {-top | -controversial} {[OPTIONAL] -hour | -day | -week | -month | -year | -all (default)} {r/subredditName} to display the top or the most controversial post from a period of time`\n`reddit sub {r/subredditName}` to display a subreddit\n`reddit search {search term}` to search something on reddit');
     } else if (args[1] == '-rand' && args[2].startsWith('r/')) {
       args.splice(0, 2);
       const s = args.join('%20');
@@ -179,7 +179,7 @@ module.exports = {
       const s = args.join('%20');
       message.channel.send(`https://www.reddit.com/search/?q=${s}`);
     } else {
-      message.channel.send('Invalid Syntax! Try:\n`reddit -rand {r/subredditName}`\n`reddit {-hot | -new | -rising} {r/subredditName}`\n`reddit {-top | -controversial} {[OPTIONAL] -hour | -day | -week | -month | -year | -all (default)} {r/subredditName}`\n`reddit sub {r/subredditName}`\n`reddit search {search term}`');
+      message.channel.send('Invalid Syntax! Try:\n`reddit -rand {r/subredditName} to display a random submission from a subreddit`\n`reddit {-hot | -new | -rising} {r/subredditName} to display the newest, hottest or most rising submission from a subreddit`\n`reddit {-top | -controversial} {[OPTIONAL] -hour | -day | -week | -month | -year | -all (default)} {r/subredditName} to display the top or the most controversial post from a period of time`\n`reddit sub {r/subredditName}` to display a subreddit\n`reddit search {search term}` to search something on reddit');
     }
   },
   stackov (args, message) {

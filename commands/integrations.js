@@ -64,9 +64,7 @@ module.exports = {
     const alg1 = (spliceIndex) => {
       args.splice(0, spliceIndex);
       const s = args.join('+');
-      const url = `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${s}&inputtype=textquery&fields=formatted_address&key=${
-        credentials.apiKeys.googleCloud
-      }`;
+      const url = `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${s}&inputtype=textquery&fields=formatted_address&key=${credentials.apiKeys.googleCloud}`;
       request(url, (error, response, body) => {
         const Obj = JSON.parse(body);
         // eslint-disable-next-line camelcase
@@ -201,22 +199,24 @@ module.exports = {
     );
   },
   translate (args, message) {
-    if (args[2] == 'to') {
-      const from = args[1];
-      from.toLowerCase();
-      const to = args[3];
-      to.toLowerCase();
+    if (args.length < 5 || !args[2] == 'to') {
+      message.channel.send('Invalid Syntax! Try:\n`translate {langFrom} to {langTo} {word/sentence}` to translate words and sentences between languages');
+    } else {
+      const from = args[1].toLowerCase();
+      const to = args[3].toLowerCase();
       args.splice(0, 4);
       const s = args.join(' ');
-      const url = `https://translate.yandex.net/api/v1.5/tr.json/translate?key=${
-        credentials.apiKeys.yandexTranslate
-      }&text=${s}&lang=${from}-${to}`;
+      const url = `https://translate.yandex.net/api/v1.5/tr.json/translate?key=${credentials.apiKeys.yandexTranslate}&text=${s}&lang=${from}-${to}`;
       request(url, (error, response, body) => {
         const Obj = JSON.parse(body);
-        message.channel.send(`Translated:\n\`${Obj.text[0]}\`\n**Powered by Yandex.Translate**\nhttp://translate.yandex.com`);
+        if (Obj.message === 'Invalid parameter: lang') {
+          message.channel.send('Invalid language parameters! Please only use the language codes specified in the *Supported languages* section:\nhttps://tech.yandex.com/translate/doc/dg/concepts/api-overview-docpage/ ');
+        } else if (Obj.message === 'The specified translation direction is not supported') {
+          message.channel.send(`${Obj.message}!`);
+        } else {
+          message.channel.send(`Translated:\n\`${Obj.text[0]}\`\n*Powered by Yandex.Translate*\nhttp://translate.yandex.com`);
+        }
       });
-    } else {
-      message.channel.send('Invalid Syntax!');
     }
   },
   twitch (args, message) {
@@ -343,9 +343,7 @@ module.exports = {
   yt (args, message) {
     args.splice(0, 1);
     const s = args.join(' ');
-    const url = `https://www.googleapis.com/youtube/v3/search?q=${s}&part=snippet&maxResults=1&order=relevance&regionCode=US&safeSearch=moderate&key=${
-      credentials.apiKeys.googleCloud
-    }`;
+    const url = `https://www.googleapis.com/youtube/v3/search?q=${s}&part=snippet&maxResults=1&order=relevance&regionCode=US&safeSearch=moderate&key=${credentials.apiKeys.googleCloud}`;
     request(url, (error, response, body) => {
       const Obj = JSON.parse(body);
       if (Object.prototype.hasOwnProperty.call(Obj.items[0].id, 'channelId')) {

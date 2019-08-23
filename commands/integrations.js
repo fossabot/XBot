@@ -8,29 +8,57 @@ const credentials = require('../credentials.json');
 
 module.exports = {
   dict (args, message) {
-    args.splice(0, 1);
-    const s = args.join('%20');
-    message.channel.send(`https://www.merriam-webster.com/dictionary/${s}`);
+    if (args.length == 1) {
+      message.channel.send('Invalid Syntax! Try:\n`dict {word(s)}` to get the definition of a word(/of some words)');
+    } else {
+      args.splice(0, 1);
+      const s = args.join('%20');
+      message.channel.send(`https://www.merriam-webster.com/dictionary/${s}`);
+    }
   },
   imdb (args, message) {
-    args.splice(0, 1);
-    const s = args.join('%20');
-    const url = `http://www.omdbapi.com/?apikey=${credentials.apiKeys.omdb}&s=${s}`;
-    request(url, (error, response, body) => {
-      const Obj = JSON.parse(body);
-      message.channel.send(`https://www.imdb.com/title/${Obj.Search[0].imdbID}`);
-    });
+    if (args.length == 1) {
+      message.channel.send('Invalid Syntax! Try:\n`imdb {movie title}` to search for a movie on IMDb');
+    } else {
+      args.splice(0, 1);
+      const s = args.join('%20');
+      const url = `http://www.omdbapi.com/?apikey=${credentials.apiKeys.omdb}&s=${s}`;
+      request(url, (error, response, body) => {
+        const Obj = JSON.parse(body);
+        message.channel.send(`https://www.imdb.com/title/${Obj.Search[0].imdbID}`);
+      });
+    }
   },
   imgur (args, message) {
-    args.splice(0, 1);
-    const s = args.join(' ');
-    const url = `https://api.imgur.com/3/gallery/search/relevance?q=${s}&client_id=${
-      credentials.oauth.imgur.clientId
-    }`;
-    request(url, (error, response, body) => {
-      const Obj = JSON.parse(body);
-      message.channel.send(Obj.data[0].link);
-    });
+    if (args.length == 1) {
+      message.channel.send('Invalid Syntax! Try:\n`imgur {[OPTIONAL] time (default)| viral | top} {[OPTIONAL] (if top) -> day | week | month | year | all (default)} {search term(s)}` to search images on imgur');
+    } else {
+      args.splice(0, 1);
+      const allSort = '-time|-viral|-top';
+      const allRange = '-day|-week|-month|-year|-all';
+      let url;
+      if (allSort.includes(args[0].toLowerCase())) {
+        if (args[0] == '-time' || args[0] == '-viral' || args[0] == '-top' && !allRange.includes(args[1])) {
+          const sort = args[0].substring(1);
+          args.splice(0, 1);
+          const s = args.join(' ');
+          url = `https://api.imgur.com/3/gallery/search/${sort}?q=${s}&client_id=${credentials.oauth.imgur.clientId}`;
+        } else {
+          const sort = args[0].substring(1);
+          const range = args[1].substring(1);
+          args.splice(0, 2);
+          const s = args.join(' ');
+          url = `https://api.imgur.com/3/gallery/search/${sort}/${range}?q=${s}&client_id=${credentials.oauth.imgur.clientId}`;
+        }
+      } else {
+        const s = args.join(' ');
+        url = `https://api.imgur.com/3/gallery/search/time?q=${s}&client_id=${credentials.oauth.imgur.clientId}`;
+      }
+      request(url, (error, response, body) => {
+        const Obj = JSON.parse(body);
+        message.channel.send(Obj.data[0].link);
+      });
+    }
   },
   maps (args, message) {
     args.splice(0, 1);
@@ -55,7 +83,7 @@ module.exports = {
     });
     args.splice(0, 1);
     const s = args.join('%20');
-    if (s.startsWith('r/'))
+    if (s.startsWith('r/')) {
       if (s.endsWith('%20-s')) {
         r.getSubreddit(s.substring(2, s.length - 5))
           .getRandomSubmission()
@@ -65,7 +93,9 @@ module.exports = {
       } else {
         message.channel.send(`https://www.reddit.com/${s}`);
       }
-    else message.channel.send(`https://www.reddit.com/search/?q=${s}`);
+    } else {
+      message.channel.send(`https://www.reddit.com/search/?q=${s}`);
+    }
   },
   stackov (args, message) {
     args.splice(0, 1);
@@ -98,9 +128,7 @@ module.exports = {
       }&text=${s}&lang=${from}-${to}`;
       request(url, (error, response, body) => {
         const Obj = JSON.parse(body);
-        message.channel.send(`Translated:\n\`${
-          Obj.text[0]
-        }\`\n**Powered by Yandex.Translate**\nhttp://translate.yandex.com`);
+        message.channel.send(`Translated:\n\`${Obj.text[0]}\`\n**Powered by Yandex.Translate**\nhttp://translate.yandex.com`);
       });
     } else {
       message.channel.send('Invalid Syntax!');
@@ -118,9 +146,7 @@ module.exports = {
         s = s.replace(/>/gu, '%3E');
         s = s.replace(/#/gu, '%23');
         s = s.replace(/%/gu, '%25');
-        const url = `https://api.twitch.tv/kraken/search/channels?query=${s}&limit=1&client_id=${
-          credentials.apiKeys.twitch
-        }`;
+        const url = `https://api.twitch.tv/kraken/search/channels?query=${s}&limit=1&client_id=${credentials.apiKeys.twitch}`;
         request(url, (error, response, body) => {
           const Obj = JSON.parse(body);
           message.channel.send(Obj.channels[0].url);
@@ -137,9 +163,7 @@ module.exports = {
         s = s.replace(/>/gu, '%3E');
         s = s.replace(/#/gu, '%23');
         s = s.replace(/%/gu, '%25');
-        const url = `https://api.twitch.tv/kraken/search/games?query=${s}&client_id=${
-          credentials.apiKeys.twitch
-        }`;
+        const url = `https://api.twitch.tv/kraken/search/games?query=${s}&client_id=${credentials.apiKeys.twitch}`;
         request(url, (error, response, body) => {
           const Obj = JSON.parse(body);
           let x = Obj.games[0].name;
@@ -165,9 +189,7 @@ module.exports = {
         s = s.replace(/>/gu, '%3E');
         s = s.replace(/#/gu, '%23');
         s = s.replace(/%/gu, '%25');
-        const url = `https://api.twitch.tv/kraken/search/streams?query=${s}&limit=1&client_id=${
-          credentials.apiKeys.twitch
-        }`;
+        const url = `https://api.twitch.tv/kraken/search/streams?query=${s}&limit=1&client_id=${credentials.apiKeys.twitch}`;
         request(url, (error, response, body) => {
           const Obj = JSON.parse(body);
           message.channel.send(`https://www.twitch.tv/${Obj.streams[0].channel.name}`);
@@ -197,37 +219,31 @@ module.exports = {
   weather (args, message) {
     args.splice(0, 1);
     const s = args.join('%20');
-    const url = `https://api.openweathermap.org/data/2.5/weather?q=${s}&units=metric&APPID=${
-      credentials.apiKeys.openWeather
-    }`;
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=${s}&units=metric&APPID=${credentials.apiKeys.openWeather}`;
     request(url, (error, response, body) => {
       const Obj = JSON.parse(body);
       const sunrise = new Date(parseInt(Obj.sys.sunrise, 10) * 1000 + Obj.timezone / 1000);
       const sunriseHour = sunrise.getHours();
       let sunriseMinute = `${sunrise.getMinutes()}`;
-      if (sunriseMinute.length == 1) sunriseMinute = `0${sunriseMinute}`;
+      if (sunriseMinute.length == 1) {
+        sunriseMinute = `0${sunriseMinute}`;
+      }
       const sunset = new Date(parseInt(Obj.sys.sunset, 10) * 1000 + Obj.timezone / 1000);
       const sunsetHour = sunset.getHours();
       let sunsetMinute = `${sunset.getMinutes()}`;
-      if (sunsetMinute.length == 1) sunsetMinute = `0${sunsetMinute}`;
+      if (sunsetMinute.length == 1) {
+        sunsetMinute = `0${sunsetMinute}`;
+      }
       const currentWeather = new Discord.RichEmbed()
         .setColor('#fcb103')
         .attachFiles(['./assets/images/open_weather_logo.png'])
-        .setAuthor(
-          'Open Weather',
-          'attachment://open_weather_logo.png',
-          'https://openweathermap.org/'
-        )
+        .setAuthor('Open Weather', 'attachment://open_weather_logo.png', 'https://openweathermap.org/')
         .setThumbnail(`http://openweathermap.org/img/wn/${Obj.weather[0].icon}@2x.png`)
         .setTitle(`Weather in ${Obj.name}, ${Obj.sys.country}`)
         .setDescription(`${Obj.main.temp}°C`)
         .setURL(`https://openweathermap.org/city/${Obj.id}`)
         .addField(Obj.weather[0].main, Obj.weather[0].description)
-        .addField(
-          'Wind: ',
-          `Speed = ${Obj.wind.speed} meters/sec, Direction = ${Obj.wind.deg}°`,
-          true
-        )
+        .addField('Wind: ', `Speed = ${Obj.wind.speed} meters/sec, Direction = ${Obj.wind.deg}°`, true)
         .addField('Cloudiness: ', `${Obj.clouds.all}%`, true)
         .addField('Pressure: ', `${Obj.main.pressure} hPa`, true)
         .addField('Humidity: ', `${Obj.main.humidity}%`, true)
@@ -247,10 +263,11 @@ module.exports = {
     }`;
     request(url, (error, response, body) => {
       const Obj = JSON.parse(body);
-      if (Object.prototype.hasOwnProperty.call(Obj.items[0].id, 'channelId'))
+      if (Object.prototype.hasOwnProperty.call(Obj.items[0].id, 'channelId')) {
         message.channel.send(`https://www.youtube.com/channel/${Obj.items[0].id.channelId}`);
-      else if (Object.prototype.hasOwnProperty.call(Obj.items[0].id, 'videoId'))
+      } else if (Object.prototype.hasOwnProperty.call(Obj.items[0].id, 'videoId')) {
         message.channel.send(`https://www.youtube.com/watch?v=${Obj.items[0].id.videoId}`);
+      }
     });
   },
 };

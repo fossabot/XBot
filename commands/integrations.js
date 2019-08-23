@@ -105,20 +105,81 @@ module.exports = {
       clientSecret: credentials.oauth.reddit.clientSecret,
       refreshToken: credentials.oauth.reddit.refreshToken,
     });
-    args.splice(0, 1);
-    const s = args.join('%20');
-    if (s.startsWith('r/')) {
-      if (s.endsWith('%20-s')) {
-        r.getSubreddit(s.substring(2, s.length - 5))
-          .getRandomSubmission()
-          .url.then((value) => {
-            message.channel.send(value);
-          });
+    const allTime = '-hour|-day|-week|-month|-year|-all';
+    if (args.length == 1) {
+      message.channel.send('Invalid Syntax! Try:\n`reddit -rand {r/subredditName}`\n`reddit {-hot | -new | -rising} {r/subredditName}`\n`reddit {-top | -controversial} {[OPTIONAL] -hour | -day | -week | -month | -year | -all (default)} {r/subredditName}`\n`reddit sub {r/subredditName}`\n`reddit search {search term}`');
+    } else if (args[1] == '-rand' && args[2].startsWith('r/')) {
+      args.splice(0, 2);
+      const s = args.join('%20');
+      r.getSubreddit(s.substring(2))
+        .getRandomSubmission()
+        .url.then((value) => {
+          message.channel.send(value);
+        });
+    } else if (args[1].toLowerCase() === '-hot') {
+      args.splice(0, 2);
+      const s = args.join('%20');
+      r.getSubreddit(s.substring(2))
+        .getHot()
+        .then((value) => {
+          message.channel.send(value[0].url);
+        });
+    } else if (args[1].toLowerCase() === '-new') {
+      args.splice(0, 2);
+      const s = args.join('%20');
+      r.getSubreddit(s.substring(2))
+        .getNew()
+        .then((value) => {
+          message.channel.send(value[0].url);
+        });
+    } else if (args[1].toLowerCase() === '-top') {
+      let time;
+      if (allTime.includes(args[2].toLowerCase())) {
+        time = args[2].substring(1);
+        args.splice(0, 3);
       } else {
-        message.channel.send(`https://www.reddit.com/${s}`);
+        time = 'all';
+        args.splice(0, 2);
       }
-    } else {
+      const s = args.join('%20');
+      r.getSubreddit(s.substring(2))
+        .getTop({time})
+        .then((value) => {
+          message.channel.send(value[0].url);
+        });
+    } else if (args[1].toLowerCase() === '-controversial') {
+      let time;
+      if (allTime.includes(args[2].toLowerCase())) {
+        time = args[2].substring(1);
+        args.splice(0, 3);
+      } else {
+        time = 'all';
+        args.splice(0, 2);
+      }
+      const s = args.join('%20');
+      r.getSubreddit(s.substring(2))
+        .getControversial({time})
+        .then((value) => {
+          message.channel.send(value[0].url);
+        });
+    } else if (args[1].toLowerCase() === '-rising') {
+      args.splice(0, 2);
+      const s = args.join('%20');
+      r.getSubreddit(s.substring(2))
+        .getRising()
+        .then((value) => {
+          message.channel.send(value[0].url);
+        });
+    } else if (args[1] === 'sub' && args[2].startsWith('r/')) {
+      args.splice(0, 2);
+      const s = args.join('%20');
+      message.channel.send(`https://www.reddit.com/${s}`);
+    } else if (args[1] === 'search') {
+      args.splice(0, 2);
+      const s = args.join('%20');
       message.channel.send(`https://www.reddit.com/search/?q=${s}`);
+    } else {
+      message.channel.send('Invalid Syntax! Try:\n`reddit -rand {r/subredditName}`\n`reddit {-hot | -new | -rising} {r/subredditName}`\n`reddit {-top | -controversial} {[OPTIONAL] -hour | -day | -week | -month | -year | -all (default)} {r/subredditName}`\n`reddit sub {r/subredditName}`\n`reddit search {search term}`');
     }
   },
   stackov (args, message) {

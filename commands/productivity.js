@@ -107,7 +107,7 @@ module.exports = {
     }
   },
   currency (args, message) {
-    if (args.length != 5 || args[3].toLowerCase() != 'to' || !isNaN(args[1])) {
+    if (args.length != 5 || args[3].toLowerCase() != 'to' || isNaN(args[1])) {
       message.channel.send('Invalid Syntax! Try:\n`currency {value} {codeFrom} to {codeTo}` to convert between currencies\n**List of supported currencies:**\nhttps://fixer.io/symbols');
     } else {
       const v = args[1];

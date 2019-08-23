@@ -107,25 +107,27 @@ module.exports = {
     }
   },
   currency (args, message) {
-    if (args[3] == 'to') {
+    if (args.length != 5 || args[3].toLowerCase() != 'to' || !isNaN(args[1])) {
+      message.channel.send('Invalid Syntax! Try:\n`currency {value} {codeFrom} to {codeTo}` to convert between currencies\n**List of supported currencies:**\nhttps://fixer.io/symbols');
+    } else {
       const v = args[1];
-      const from = args[2];
-      from.toUpperCase();
-      const to = args[4];
-      to.toUpperCase();
+      const from = args[2].toUpperCase();
+      const to = args[4].toUpperCase();
       const url = `http://data.fixer.io/api/latest?access_key=${
         credentials.apiKeys.fixerIO
       }&symbols=AED,AFN,ALL,AMD,ANG,AOA,ARS,AUD,AWG,AZN,BAM,BBD,BDT,BGN,BHD,BIF,BMD,BND,BOB,BRL,BSD,BTC,BTN,BWP,BYR,BYN,BZD,CAD,CDF,CHF,CLF,CLP,CNY,COP,CRC,CUC,CUP,CVE,CZK,DJF,DKK,DOP,DZD,EGP,ERN,ETB,EUR,FJD,FKP,GBP,GEL,GGP,GHS,GIP,GMD,GNF,GTQ,GYD,HKD,HNL,HRK,HTG,HUF,IDR,ILS,IMP,INR,IQD,IRR,ISK,JEP,JMD,JOD,JPY,KES,KGS,KHR,KMF,KPW,KRW,KWD,KYD,KZT,LAK,LBP,LKR,LRD,LSL,LTL,LVL,LYD,MAD,MDL,MGA,MKD,MMK,MNT,MOP,MRO,MUR,MVR,MWK,MXN,MYR,MZN,NAD,NGN,NIO,NOK,NPR,NZD,OMR,PAB,PEN,PGK,PHP,PKR,PLN,PYG,QAR,RON,RSD,RUB,RWF,SAR,SBD,SCR,SDG,SEK,SGD,SHP,SLL,SOS,SRD,STD,SVC,SYP,SZL,THB,TJS,TMT,TND,TOP,TRY,TTD,TWD,TZS,UAH,UGX,USD,UYU,UZS,VEF,VND,VUV,WST,XAF,XAG,XAU,XCD,XDR,XOF,XPF,YER,ZAR,ZMK,ZMW,ZWL&format=1`;
       request(url, (error, response, body) => {
         const Obj = JSON.parse(body);
         const val = parseFloat(v);
-        const fval = Obj.rates[from];
-        const tval = Obj.rates[to];
-        const res = val / fval * tval;
-        message.channel.send(`Converted: ${res} ${to}`);
+        if (Object.prototype.hasOwnProperty.call(Obj.rates, from) && Object.prototype.hasOwnProperty.call(Obj.rates, to)) {
+          const fval = Obj.rates[from];
+          const tval = Obj.rates[to];
+          const res = val / fval * tval;
+          message.channel.send(`Converted:\n\`${res} ${to}\``);
+        } else {
+          message.channel.send('Invalid Syntax! Try:\n`currency {value} {codeFrom} to {codeTo}` to convert between currencies\n**List of supported currencies:**\nhttps://fixer.io/symbols');
+        }
       });
-    } else {
-      message.channel.send('Invalid Syntax!');
     }
   },
   hash (args, message) {

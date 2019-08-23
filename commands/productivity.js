@@ -114,7 +114,7 @@ module.exports = {
       const to = args[4];
       to.toUpperCase();
       const url = `http://data.fixer.io/api/latest?access_key=${
-        credentials.api_keys.fixer_io
+        credentials.apiKeys.fixerIO
       }&symbols=AED,AFN,ALL,AMD,ANG,AOA,ARS,AUD,AWG,AZN,BAM,BBD,BDT,BGN,BHD,BIF,BMD,BND,BOB,BRL,BSD,BTC,BTN,BWP,BYR,BYN,BZD,CAD,CDF,CHF,CLF,CLP,CNY,COP,CRC,CUC,CUP,CVE,CZK,DJF,DKK,DOP,DZD,EGP,ERN,ETB,EUR,FJD,FKP,GBP,GEL,GGP,GHS,GIP,GMD,GNF,GTQ,GYD,HKD,HNL,HRK,HTG,HUF,IDR,ILS,IMP,INR,IQD,IRR,ISK,JEP,JMD,JOD,JPY,KES,KGS,KHR,KMF,KPW,KRW,KWD,KYD,KZT,LAK,LBP,LKR,LRD,LSL,LTL,LVL,LYD,MAD,MDL,MGA,MKD,MMK,MNT,MOP,MRO,MUR,MVR,MWK,MXN,MYR,MZN,NAD,NGN,NIO,NOK,NPR,NZD,OMR,PAB,PEN,PGK,PHP,PKR,PLN,PYG,QAR,RON,RSD,RUB,RWF,SAR,SBD,SCR,SDG,SEK,SGD,SHP,SLL,SOS,SRD,STD,SVC,SYP,SZL,THB,TJS,TMT,TND,TOP,TRY,TTD,TWD,TZS,UAH,UGX,USD,UYU,UZS,VEF,VND,VUV,WST,XAF,XAG,XAU,XCD,XDR,XOF,XPF,YER,ZAR,ZMK,ZMW,ZWL&format=1`;
       request(url, (error, response, body) => {
         const Obj = JSON.parse(body);
@@ -150,7 +150,7 @@ module.exports = {
     }
   },
   roman (args, message) {
-    const roman_to_decimal = {
+    const romanToDecimal = {
       M: 1000,
       D: 500,
       C: 100,
@@ -159,29 +159,29 @@ module.exports = {
       V: 5,
       I: 1,
     };
-    const is_roman = [...args[1]].every((char) => Object.prototype.hasOwnProperty.call(roman_to_decimal, char));
+    const isRoman = [...args[1]].every((char) => Object.prototype.hasOwnProperty.call(romanToDecimal, char));
     if (args.length > 2) {
       message.channel.send('Invalid Syntax! Try:\n`roman {roman numeral | decimal number}` to convert between roman numerals and decimal numbers (the type is auto-detected)');
-    } else if (is_roman) {
+    } else if (isRoman) {
       const s = args[1];
       let val = 0;
       for (let i = 0; i < s.length - 1; ++i)
-        if (roman_to_decimal[s[i]] >= roman_to_decimal[s[i + 1]]) val += roman_to_decimal[s[i]];
-        else val -= roman_to_decimal[s[i]];
-      val += roman_to_decimal[s[s.length - 1]];
+        if (romanToDecimal[s[i]] >= romanToDecimal[s[i + 1]]) val += romanToDecimal[s[i]];
+        else val -= romanToDecimal[s[i]];
+      val += romanToDecimal[s[s.length - 1]];
       message.channel.send(`Converted to a decimal number:\n\`${val}\``);
     } else if (isNaN(args[1])) {
       message.channel.send('Invalid Syntax! Try:\n`roman {roman numeral | decimal number}` to convert between roman numerals and decimal numbers (the type is auto-detected)');
     } else {
-      const decimal_value = [1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1];
-      const roman_value = ['M', 'CM', 'D', 'CD', 'C', 'XC', 'L', 'XL', 'X', 'IX', 'V', 'IV', 'I'];
+      const decimalValue = [1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1];
+      const romanValue = ['M', 'CM', 'D', 'CD', 'C', 'XC', 'L', 'XL', 'X', 'IX', 'V', 'IV', 'I'];
       let s = parseInt(args[1], 10);
       let res = '';
       let i = 0;
       while (s)
-        if (s >= decimal_value[i]) {
-          s -= decimal_value[i];
-          res += roman_value[i];
+        if (s >= decimalValue[i]) {
+          s -= decimalValue[i];
+          res += romanValue[i];
         } else {
           ++i;
         }

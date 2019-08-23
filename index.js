@@ -17,7 +17,7 @@ client.once('ready', () => {
   console.log('Ready!');
 });
 
-client.login(credentials.bot_token);
+client.login(credentials.botToken);
 
 const con = mysql.createConnection({
   host: 'localhost',
@@ -52,8 +52,8 @@ client.on('message', (message) => {
   con.query(sql, (err, result) => {
     if (err) throw err;
     const pref = result[0].prefix;
-    const disabled_string = result[0].disabled;
-    const disabled = disabled_string.split(' ');
+    const disabledString = result[0].disabled;
+    const disabled = disabledString.split(' ');
     const commands = {
       avatar: 1,
       ban: 1,
@@ -176,10 +176,10 @@ client.on('message', (message) => {
           else message.channel.send('This command is disabled!');
           break;
         case 'disable':
-          utility.disable(args, message, con, disabled_string, commands);
+          utility.disable(args, message, con, disabledString, commands);
           break;
         case 'enable':
-          utility.enable(args, message, con, disabled_string, commands);
+          utility.enable(args, message, con, disabledString, commands);
           break;
         case 'help':
           if (commands.help) utility.help(args, message);

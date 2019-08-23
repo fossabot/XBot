@@ -2,7 +2,7 @@
 'use strict';
 const Discord = require('discord.js');
 const request = require('request');
-const snoowrap = require('snoowrap');
+const Snoowrap = require('snoowrap');
 
 const credentials = require('../credentials.json');
 
@@ -15,7 +15,7 @@ module.exports = {
   imdb (args, message) {
     args.splice(0, 1);
     const s = args.join('%20');
-    const url = `http://www.omdbapi.com/?apikey=${credentials.api_keys.omdb}&s=${s}`;
+    const url = `http://www.omdbapi.com/?apikey=${credentials.apiKeys.omdb}&s=${s}`;
     request(url, (error, response, body) => {
       const Obj = JSON.parse(body);
       message.channel.send(`https://www.imdb.com/title/${Obj.Search[0].imdbID}`);
@@ -25,7 +25,7 @@ module.exports = {
     args.splice(0, 1);
     const s = args.join(' ');
     const url = `https://api.imgur.com/3/gallery/search/relevance?q=${s}&client_id=${
-      credentials.oauth.imgur.client_id
+      credentials.oauth.imgur.clientId
     }`;
     request(url, (error, response, body) => {
       const Obj = JSON.parse(body);
@@ -47,11 +47,11 @@ module.exports = {
   },
   reddit (args, message) {
     // eslint-disable-next-line new-cap
-    const r = new snoowrap({
+    const r = new Snoowrap({
       userAgent: 'XBot',
-      clientId: credentials.oauth.reddit.client_id,
-      clientSecret: credentials.oauth.reddit.client_secret,
-      refreshToken: credentials.oauth.reddit.refresh_token,
+      clientId: credentials.oauth.reddit.clientId,
+      clientSecret: credentials.oauth.reddit.clientSecret,
+      refreshToken: credentials.oauth.reddit.refreshToken,
     });
     args.splice(0, 1);
     const s = args.join('%20');
@@ -94,7 +94,7 @@ module.exports = {
       args.splice(0, 4);
       const s = args.join(' ');
       const url = `https://translate.yandex.net/api/v1.5/tr.json/translate?key=${
-        credentials.api_keys.yandex_translate
+        credentials.apiKeys.yandexTranslate
       }&text=${s}&lang=${from}-${to}`;
       request(url, (error, response, body) => {
         const Obj = JSON.parse(body);
@@ -119,7 +119,7 @@ module.exports = {
         s = s.replace(/#/gu, '%23');
         s = s.replace(/%/gu, '%25');
         const url = `https://api.twitch.tv/kraken/search/channels?query=${s}&limit=1&client_id=${
-          credentials.api_keys.twitch
+          credentials.apiKeys.twitch
         }`;
         request(url, (error, response, body) => {
           const Obj = JSON.parse(body);
@@ -138,7 +138,7 @@ module.exports = {
         s = s.replace(/#/gu, '%23');
         s = s.replace(/%/gu, '%25');
         const url = `https://api.twitch.tv/kraken/search/games?query=${s}&client_id=${
-          credentials.api_keys.twitch
+          credentials.apiKeys.twitch
         }`;
         request(url, (error, response, body) => {
           const Obj = JSON.parse(body);
@@ -166,7 +166,7 @@ module.exports = {
         s = s.replace(/#/gu, '%23');
         s = s.replace(/%/gu, '%25');
         const url = `https://api.twitch.tv/kraken/search/streams?query=${s}&limit=1&client_id=${
-          credentials.api_keys.twitch
+          credentials.apiKeys.twitch
         }`;
         request(url, (error, response, body) => {
           const Obj = JSON.parse(body);
@@ -198,19 +198,19 @@ module.exports = {
     args.splice(0, 1);
     const s = args.join('%20');
     const url = `https://api.openweathermap.org/data/2.5/weather?q=${s}&units=metric&APPID=${
-      credentials.api_keys.open_weather
+      credentials.apiKeys.openWeather
     }`;
     request(url, (error, response, body) => {
       const Obj = JSON.parse(body);
       const sunrise = new Date(parseInt(Obj.sys.sunrise, 10) * 1000 + Obj.timezone / 1000);
-      const sunrise_hour = sunrise.getHours();
-      let sunrise_minute = `${sunrise.getMinutes()}`;
-      if (sunrise_minute.length == 1) sunrise_minute = `0${sunrise_minute}`;
+      const sunriseHour = sunrise.getHours();
+      let sunriseMinute = `${sunrise.getMinutes()}`;
+      if (sunriseMinute.length == 1) sunriseMinute = `0${sunriseMinute}`;
       const sunset = new Date(parseInt(Obj.sys.sunset, 10) * 1000 + Obj.timezone / 1000);
-      const sunset_hour = sunset.getHours();
-      let sunset_minute = `${sunset.getMinutes()}`;
-      if (sunset_minute.length == 1) sunset_minute = `0${sunset_minute}`;
-      const current_weather = new Discord.RichEmbed()
+      const sunsetHour = sunset.getHours();
+      let sunsetMinute = `${sunset.getMinutes()}`;
+      if (sunsetMinute.length == 1) sunsetMinute = `0${sunsetMinute}`;
+      const currentWeather = new Discord.RichEmbed()
         .setColor('#fcb103')
         .attachFiles(['./assets/images/open_weather_logo.png'])
         .setAuthor(
@@ -231,19 +231,19 @@ module.exports = {
         .addField('Cloudiness: ', `${Obj.clouds.all}%`, true)
         .addField('Pressure: ', `${Obj.main.pressure} hPa`, true)
         .addField('Humidity: ', `${Obj.main.humidity}%`, true)
-        .addField('Sunrise: ', `${sunrise_hour}:${sunrise_minute}`, true)
-        .addField('Sunset: ', `${sunset_hour}:${sunset_minute}`, true)
+        .addField('Sunrise: ', `${sunriseHour}:${sunriseMinute}`, true)
+        .addField('Sunset: ', `${sunsetHour}:${sunsetMinute}`, true)
         .addField('Geo Coordinates:', `Lat: ${Obj.coord.lat}, Lon: ${Obj.coord.lon}`, true)
         .setTimestamp()
         .setFooter('Data from: https://openweathermap.org', 'attachment://open_weather_logo.png');
-      message.channel.send(current_weather);
+      message.channel.send(currentWeather);
     });
   },
   yt (args, message) {
     args.splice(0, 1);
     const s = args.join(' ');
     const url = `https://www.googleapis.com/youtube/v3/search?q=${s}&part=snippet&maxResults=1&order=relevance&regionCode=US&safeSearch=moderate&key=${
-      credentials.api_keys.youtube
+      credentials.apiKeys.youtube
     }`;
     request(url, (error, response, body) => {
       const Obj = JSON.parse(body);

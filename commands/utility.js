@@ -1,7 +1,7 @@
 const mysql = require('mysql');
 
 module.exports = {
-  disable (args, message, con, disabled_string, commands) {
+  disable (args, message, con, disabledString, commands) {
     args[1] = args[1].toLowerCase();
     if (args.length != 2)
       message.channel.send('Invalid Syntax! Try:\n`disable {command}` to disable a command');
@@ -10,11 +10,11 @@ module.exports = {
     else if (!Object.prototype.hasOwnProperty.call(commands, args[1]))
       message.channel.send('Please enter a valid command!');
     else if (message.member.hasPermission('MANAGE_GUILD'))
-      if (disabled_string.includes(args[1])) {
+      if (disabledString.includes(args[1])) {
         message.channel.send('This command is already disabled!');
       } else {
         let sql = 'UPDATE ?? SET disabled = ? WHERE id = ?';
-        const inserts = ['servers', disabled_string + args[1], message.guild.id];
+        const inserts = ['servers', disabledString + args[1], message.guild.id];
         sql = mysql.format(sql, inserts);
         con.query(sql, (err) => {
           if (err) throw err;
@@ -23,7 +23,7 @@ module.exports = {
       }
     else message.channel.send('You don\'t have the necessary permissions!');
   },
-  enable (args, message, con, disabled_string, commands) {
+  enable (args, message, con, disabledString, commands) {
     args[1] = args[1].toLowerCase();
     if (args.length != 2)
       message.channel.send('Invalid Syntax! Try:\n`enable {command}` to enable a command');
@@ -32,12 +32,12 @@ module.exports = {
     else if (!Object.prototype.hasOwnProperty.call(commands, args[1]))
       message.channel.send('Please enter a valid command!');
     else if (message.member.hasPermission('MANAGE_GUILD'))
-      if (disabled_string.includes(args[1])) {
-        let disabled_str = disabled_string;
-        disabled_str = disabled_str.replace(args[1], '');
-        disabled_str = disabled_str.replace(/\s+/gu, ' ');
+      if (disabledString.includes(args[1])) {
+        let disabledStr = disabledString;
+        disabledStr = disabledStr.replace(args[1], '');
+        disabledStr = disabledStr.replace(/\s+/gu, ' ');
         let sql = 'UPDATE ?? SET disabled = ? WHERE id =  ?';
-        const inserts = ['servers', disabled_str, message.guild.id];
+        const inserts = ['servers', disabledStr, message.guild.id];
         sql = mysql.format(sql, inserts);
         con.query(sql, (err) => {
           if (err) throw err;

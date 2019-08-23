@@ -9,49 +9,29 @@ const {md5, sha1, sha256} = require('tiny-hashes');
 
 module.exports = {
   base (args, message) {
-    if (args[3] == 'to') {
-      let v = args[1];
-      let from, to;
-      if (args[2] == 'BIN' || args[2] == 'OCT' || args[2] == 'DEC' || args[2] == 'HEX') {
-        // eslint-disable-next-line default-case
-        switch (args[2]) {
-          case 'BIN':
-            from = 2;
-            break;
-          case 'OCT':
-            from = 8;
-            break;
-          case 'DEC':
-            from = 10;
-            break;
-          case 'HEX':
-            from = 16;
-            break;
-        }
-        // eslint-disable-next-line default-case
-        switch (args[4]) {
-          case 'BIN':
-            to = 2;
-            break;
-          case 'OCT':
-            to = 8;
-            break;
-          case 'DEC':
-            to = 10;
-            break;
-          case 'HEX':
-            to = 16;
-            break;
-        }
-      } else {
-        from = parseFloat(args[2]);
-        to = parseFloat(args[4]);
-        if (from < 2 || from > 32 || to < 2 || to > 32) message.channel.send('Invalid Syntax!');
-      }
-      v = parseInt(v, from);
-      message.channel.send(`Converted: ${v.toString(to)}`);
+    if (args.length != 5 || args[3].toLowerCase() != 'to' || isNaN(args[1])) {
+      message.channel.send('Invalid Syntax! Try:\n`base {value} {baseFrom} to {baseTo}` to convert between bases\n**baseTo and baseFrom can be numbers between 2 and 36 or one of these strings: "BIN", "OCT", "DEC", "HEX"**');
     } else {
-      message.channel.send('Invalid Syntax!');
+      const baseValues = {
+        BIN: 2,
+        OCT: 8,
+        DEC: 10,
+        HEX: 16,
+      };
+      const v = args[1];
+      let from, to;
+      args[2] = args[2].toUpperCase();
+      args[4] = args[4].toUpperCase();
+      const inRange = (val, min, max) => val >= min && val <= max;
+      if (Object.prototype.hasOwnProperty.call(baseValues, args[2])) from = baseValues[args[2]];
+      else if (!isNaN(args[2])) from = parseFloat(args[2]);
+      if (Object.prototype.hasOwnProperty.call(baseValues, args[4])) to = baseValues[args[4]];
+      else if (!isNaN(args[4])) to = parseFloat(args[4]);
+      if (!inRange(from, 2, 36) || !inRange(to, 2, 36)) {
+        message.channel.send('Invalid Syntax! Try:\n`base {value} {baseFrom} to {baseTo}` to convert between bases\n**baseTo and baseFrom can be numbers between 2 and 36 or one of these strings: "BIN", "OCT", "DEC", "HEX"**');
+        return;
+      }
+      message.channel.send(`Converted: ${parseInt(v, from).toString(to)}`);
     }
   },
   calc (args, message) {

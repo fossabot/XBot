@@ -23,10 +23,16 @@ module.exports = {
       args[2] = args[2].toUpperCase();
       args[4] = args[4].toUpperCase();
       const inRange = (val, min, max) => val >= min && val <= max;
-      if (Object.prototype.hasOwnProperty.call(baseValues, args[2])) from = baseValues[args[2]];
-      else if (!isNaN(args[2])) from = parseFloat(args[2]);
-      if (Object.prototype.hasOwnProperty.call(baseValues, args[4])) to = baseValues[args[4]];
-      else if (!isNaN(args[4])) to = parseFloat(args[4]);
+      if (Object.prototype.hasOwnProperty.call(baseValues, args[2])) {
+        from = baseValues[args[2]];
+      } else if (!isNaN(args[2])) {
+        from = parseFloat(args[2]);
+      }
+      if (Object.prototype.hasOwnProperty.call(baseValues, args[4])) {
+        to = baseValues[args[4]];
+      } else if (!isNaN(args[4])) {
+        to = parseFloat(args[4]);
+      }
       if (!inRange(from, 2, 36) || !inRange(to, 2, 36)) {
         message.channel.send('Invalid Syntax! Try:\n`base {value} {baseFrom} to {baseTo}` to convert between bases\n**baseTo and baseFrom can be numbers between 2 and 36 or one of these strings: "BIN", "OCT", "DEC", "HEX"**');
         return;
@@ -43,13 +49,19 @@ module.exports = {
     } catch (err) {
       message.channel.send('Invalid Syntax! Try:\n`calc {math expression}` to evaluate a mathematical expression\n**A valid expression must use this expression syntax:**\nhttps://mathjs.org/docs/expressions/syntax.html');
     }
-    if (typeof res != 'object') message.channel.send(res);
-    else if (Object.prototype.hasOwnProperty.call(res, 're'))
-      if (res.re) message.channel.send(`${res.re} + ${res.im}i`);
-      else if (res.im > 1) message.channel.send(`${res.im}i`);
-      else message.channel.send('i');
-    else if (Object.prototype.hasOwnProperty.call(res, 'value'))
+    if (typeof res != 'object') {
+      message.channel.send(res);
+    } else if (Object.prototype.hasOwnProperty.call(res, 're')) {
+      if (res.re) {
+        message.channel.send(`${res.re} + ${res.im}i`);
+      } else if (res.im > 1) {
+        message.channel.send(`${res.im}i`);
+      } else {
+        message.channel.send('i');
+      }
+    } else if (Object.prototype.hasOwnProperty.call(res, 'value')) {
       message.channel.send(math.chain(res.value).multiply(100).value);
+    }
   },
   color (args, message) {
     let v = args[1];
@@ -147,9 +159,13 @@ module.exports = {
     } else if (isRoman) {
       const s = args[1];
       let val = 0;
-      for (let i = 0; i < s.length - 1; ++i)
-        if (romanToDecimal[s[i]] >= romanToDecimal[s[i + 1]]) val += romanToDecimal[s[i]];
-        else val -= romanToDecimal[s[i]];
+      for (let i = 0; i < s.length - 1; ++i) {
+        if (romanToDecimal[s[i]] >= romanToDecimal[s[i + 1]]) {
+          val += romanToDecimal[s[i]];
+        } else {
+          val -= romanToDecimal[s[i]];
+        }
+      }
       val += romanToDecimal[s[s.length - 1]];
       message.channel.send(`Converted to a decimal number:\n\`${val}\``);
     } else if (isNaN(args[1])) {
@@ -160,13 +176,14 @@ module.exports = {
       let s = parseInt(args[1], 10);
       let res = '';
       let i = 0;
-      while (s)
+      while (s) {
         if (s >= decimalValue[i]) {
           s -= decimalValue[i];
           res += romanValue[i];
         } else {
           ++i;
         }
+      }
       message.channel.send(`Converted to a roman numeral:\n\`${res}\``);
     }
   },

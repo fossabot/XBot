@@ -3,6 +3,7 @@
 const Discord = require('discord.js');
 const request = require('request');
 const Snoowrap = require('snoowrap');
+const ud = require('urban-dictionary');
 
 const credentials = require('../credentials.json');
 
@@ -286,20 +287,30 @@ module.exports = {
     }
   },
   urban (args, message) {
-    args.splice(0, 1);
-    let s = args.join('%20');
-    s = s.replace(/,/gu, '%2C');
-    s = s.replace(/\|/gu, '%7C');
-    s = s.replace(/"/gu, '%22');
-    s = s.replace(/</gu, '%3C');
-    s = s.replace(/>/gu, '%3E');
-    s = s.replace(/#/gu, '%23');
-    s = s.replace(/%/gu, '%25');
-    const url = `https://api.urbandictionary.com/v0/define?term=${s}`;
-    request(url, (error, response, body) => {
-      const Obj = JSON.parse(body);
-      message.channel.send(Obj.list[0].permalink);
-    });
+    if (args.length < 2) {
+      message.channel.send('Invalid Syntax! Try:\n`urban rand` to display a random definition\n`urban def {word/sequence}` to display the definition of a specific word or sequence');
+    } else if (args[1] == 'rand' && args.length == 2) {
+      ud.random()
+        .then((result) => {
+          message.channel.send(result.permalink);
+        })
+        .catch(() => {
+          message.channel.send('An error has occurred! Try again!');
+        });
+    } else if (args[1] == 'def' && args.length > 2) {
+      args.splice(0, 1);
+      const definition = args.join(' ');
+      ud.term(definition)
+        .then((result) => {
+          const entries = result.entries;
+          message.channel.send(entries[0].permalink);
+        })
+        .catch(() => {
+          message.channel.send('An error has occurred! Try again!');
+        });
+    } else {
+      message.channel.send('Invalid Syntax! Try:\n`urban rand` to display a random definition\n`urban def {word/sequence}` to display the definition of a specific word or sequence');
+    }
   },
   weather (args, message) {
     args.splice(0, 1);

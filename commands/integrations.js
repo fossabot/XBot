@@ -61,20 +61,44 @@ module.exports = {
     }
   },
   maps (args, message) {
-    args.splice(0, 1);
-    let s = args.join('+');
-    s = s.replace(/,/gu, '%2C');
-    s = s.replace(/\|/gu, '%7C');
-    s = s.replace(/"/gu, '%22');
-    s = s.replace(/</gu, '%3C');
-    s = s.replace(/>/gu, '%3E');
-    s = s.replace(/#/gu, '%23');
-    s = s.replace(/%/gu, '%25');
-    const url = `https://www.google.com/maps/search/?api=1&query=${s}`;
-    message.channel.send(url);
+    const alg1 = (spliceIndex) => {
+      args.splice(0, spliceIndex);
+      const s = args.join('+');
+      const url = `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${s}&inputtype=textquery&fields=formatted_address&key=${
+        credentials.apiKeys.googleCloud
+      }`;
+      request(url, (error, response, body) => {
+        const Obj = JSON.parse(body);
+        // eslint-disable-next-line camelcase
+        Obj.candidates[0].formatted_address = Obj.candidates[0].formatted_address.replace(/ /gu, '%20');
+        message.channel.send(`https://www.google.com/maps/place/${Obj.candidates[0].formatted_address}`);
+      });
+    };
+    const alg2 = () => {
+      args.splice(0, 2);
+      const s = args
+        .join('+')
+        .replace(/,/gu, '%2C')
+        .replace(/\|/gu, '%7C')
+        .replace(/"/gu, '%22')
+        .replace(/</gu, '%3C')
+        .replace(/>/gu, '%3E')
+        .replace(/#/gu, '%23')
+        .replace(/%/gu, '%25');
+      const url = `https://www.google.com/maps/search/?api=1&query=${s}`;
+      message.channel.send(url);
+    };
+    if (args.length == 1) {
+      message.channel.send('Invalid Syntax! Try:\n`maps {[OPTIONAL] alg1 (default) | alg2} {location}` to display the map of a location\n**You can specify which algorithm to use (in case the other one fails');
+    } else if (args[1] == 'alg1') {
+      alg1(2);
+    } else if (args[1] == 'alg2') {
+      alg2();
+    } else {
+      alg1(1);
+    }
   },
   reddit (args, message) {
-    // eslint-disable-next-line new-cap
     const r = new Snoowrap({
       userAgent: 'XBot',
       clientId: credentials.oauth.reddit.clientId,
@@ -259,7 +283,7 @@ module.exports = {
     args.splice(0, 1);
     const s = args.join(' ');
     const url = `https://www.googleapis.com/youtube/v3/search?q=${s}&part=snippet&maxResults=1&order=relevance&regionCode=US&safeSearch=moderate&key=${
-      credentials.apiKeys.youtube
+      credentials.apiKeys.googleCloud
     }`;
     request(url, (error, response, body) => {
       const Obj = JSON.parse(body);

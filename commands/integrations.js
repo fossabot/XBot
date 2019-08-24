@@ -75,15 +75,7 @@ module.exports = {
     };
     const alg2 = () => {
       args.splice(0, 2);
-      const s = args
-        .join('+')
-        .replace(/,/gu, '%2C')
-        .replace(/\|/gu, '%7C')
-        .replace(/"/gu, '%22')
-        .replace(/</gu, '%3C')
-        .replace(/>/gu, '%3E')
-        .replace(/#/gu, '%23')
-        .replace(/%/gu, '%25');
+      const s = encodeURIComponent(args.join(' '));
       const url = `https://www.google.com/maps/search/?api=1&query=${s}`;
       message.channel.send(url);
     };
@@ -181,23 +173,88 @@ module.exports = {
       message.channel.send('Invalid Syntax! Try:\n`reddit -rand {r/subredditName} to display a random submission from a subreddit`\n`reddit {-hot | -new | -rising} {r/subredditName} to display the newest, hottest or most rising submission from a subreddit`\n`reddit {-top | -controversial} {[OPTIONAL] -hour | -day | -week | -month | -year | -all (default)} {r/subredditName} to display the top or the most controversial post from a period of time`\n`reddit sub {r/subredditName}` to display a subreddit\n`reddit search {search term}` to search something on reddit');
     }
   },
-  stackov (args, message) {
-    args.splice(0, 1);
-    const s = args.join(' ');
-    const url = `https://api.stackexchange.com/2.2/search?pagesize=1&order=desc&sort=relevance&intitle=${s}&site=stackoverflow`;
-    request.get(
-      {
-        url,
-        headers: {
-          'accept-encoding': 'gzip',
+  stackex (args, message) {
+    if (args.length < 2) {
+      message.channel.send('Invalid Syntax! Try:\n`stackex {[OPTIONAL] site (default:stackoverflow)} {[OPTIONAL] -activity | -creation | -votes | -relevance (default)} {[OPTIONAL -asc | -desc (default)]} {search term}` to search a question on one of the Stack Exchange sites');
+    } else {
+      let url = 'https://api.stackexchange.com/2.2/sites';
+      request.get(
+        {
+          url,
+          headers: {
+            'accept-encoding': 'gzip',
+          },
+          gzip: true,
         },
-        gzip: true,
-      },
-      (error, response, body) => {
-        const Obj = JSON.parse(body);
-        message.channel.send(Obj.items[0].link);
-      }
-    );
+        (error, response, body) => {
+          const stackExchangeSites = JSON.parse(body);
+          let site = args[1];
+          const isValid = stackExchangeSites.items.some((elem) => site === elem.api_site_parameter);
+          const allSort = '-activity|-creation|-votes|-relevance';
+          const allOrder = '-asc|-desc';
+          if (isValid) {
+            if (allSort.includes(args[2])) {
+              const sort = args[2];
+              args.splice(0, 3);
+              if (allOrder.includes(args[0])) {
+                if (args.length == 1) {
+                  message.channel.send('Invalid Syntax! Try:\n`stackex {[OPTIONAL] site (default:stackoverflow)} {[OPTIONAL] -activity | -creation | -votes | -relevance (default)} {[OPTIONAL -asc | -desc (default)]} {search term}` to search a question on one of the Stack Exchange sites');
+                  return;
+                }
+                const order = args[0];
+                args.splice(0, 1);
+                const s = args.join(' ');
+                url = `https://api.stackexchange.com/2.2/search?pagesize=1&order=${order.substring(1)}&sort=${sort.substring(1)}&intitle=${s}&site=${site}`;
+              } else {
+                if (args.length == 0) {
+                  message.channel.send('Invalid Syntax! Try:\n`stackex {[OPTIONAL] site (default:stackoverflow)} {[OPTIONAL] -activity | -creation | -votes | -relevance (default)} {[OPTIONAL -asc | -desc (default)]} {search term}` to search a question on one of the Stack Exchange sites');
+                  return;
+                }
+                const s = args.join(' ');
+                url = `https://api.stackexchange.com/2.2/search?pagesize=1&order=desc&sort=${sort.substring(1)}&intitle=${s}&site=${site}`;
+              }
+            } else {
+              args.splice(0, 2);
+              const s = args.join(' ');
+              url = `https://api.stackexchange.com/2.2/search?pagesize=1&order=desc&sort=relevance&intitle=${s}&site=${site}`;
+            }
+            request.get(
+              {
+                url,
+                headers: {
+                  'accept-encoding': 'gzip',
+                },
+                gzip: true,
+              },
+              (error2, response2, body2) => {
+                const Obj = JSON.parse(body2);
+                message.channel.send(Obj.items[0].link);
+              }
+            );
+          } else if (args.length > 1) {
+            site = 'stackoverflow';
+            args.splice(0, 1);
+            const s = args.join(' ');
+            url = `https://api.stackexchange.com/2.2/search?pagesize=1&order=desc&sort=relevance&intitle=${s}&site=${site}`;
+            request.get(
+              {
+                url,
+                headers: {
+                  'accept-encoding': 'gzip',
+                },
+                gzip: true,
+              },
+              (error2, response2, body2) => {
+                const Obj = JSON.parse(body2);
+                message.channel.send(Obj.items[0].link);
+              }
+            );
+          } else {
+            message.channel.send('Invalid Syntax! Try:\n`stackex {[OPTIONAL] site (default:stackoverflow)} {[OPTIONAL] -activity | -creation | -votes | -relevance (default)} {[OPTIONAL -asc | -desc (default)]} {search term}` to search a question on one of the Stack Exchange sites');
+          }
+        }
+      );
+    }
   },
   translate (args, message) {
     if (args.length < 5 || !args[2] == 'to') {
@@ -221,69 +278,56 @@ module.exports = {
     }
   },
   twitch (args, message) {
-    switch (args[1]) {
-      case 'channel': {
-        args.splice(0, 2);
-        let s = args.join('%20');
-        s = s.replace(/,/gu, '%2C');
-        s = s.replace(/\|/gu, '%7C');
-        s = s.replace(/"/gu, '%22');
-        s = s.replace(/</gu, '%3C');
-        s = s.replace(/>/gu, '%3E');
-        s = s.replace(/#/gu, '%23');
-        s = s.replace(/%/gu, '%25');
-        const url = `https://api.twitch.tv/kraken/search/channels?query=${s}&limit=1&client_id=${credentials.apiKeys.twitch}`;
-        request(url, (error, response, body) => {
-          const Obj = JSON.parse(body);
-          message.channel.send(Obj.channels[0].url);
-        });
-        break;
+    if (args.length < 3) {
+      message.channel.send('Invalid Syntax! Try:\n`twitch {channel | game | stream} {channelName | gameName | streamName}` to search for a channel, game or stream on twitch');
+    } else {
+      switch (args[1]) {
+        case 'channel': {
+          args.splice(0, 2);
+          const s = encodeURIComponent(args.join(' '));
+          const url = `https://api.twitch.tv/kraken/search/channels?query=${s}&limit=1&client_id=${credentials.apiKeys.twitch}`;
+          request(url, (error, response, body) => {
+            const Obj = JSON.parse(body);
+            if (Obj.channels === null) {
+              message.channel.send('Channel not found!');
+              return;
+            }
+            message.channel.send(Obj.channels[0].url);
+          });
+          break;
+        }
+        case 'game': {
+          args.splice(0, 2);
+          const s = encodeURIComponent(args.join('%20'));
+          const url = `https://api.twitch.tv/kraken/search/games?query=${s}&client_id=${credentials.apiKeys.twitch}`;
+          request(url, (error, response, body) => {
+            const Obj = JSON.parse(body);
+            if (Obj.games === null) {
+              message.channel.send('Game not found!');
+              return;
+            }
+            const x = encodeURIComponent(Obj.games[0].name);
+            message.channel.send(`https://www.twitch.tv/directory/game/${x}`);
+          });
+          break;
+        }
+        case 'stream': {
+          args.splice(0, 2);
+          const s = encodeURIComponent(args.join(' '));
+          const url = `https://api.twitch.tv/kraken/search/streams?query=${s}&limit=1&client_id=${credentials.apiKeys.twitch}`;
+          request(url, (error, response, body) => {
+            const Obj = JSON.parse(body);
+            if (Obj.streams === null) {
+              message.channel.send('Stream not found!');
+              return;
+            }
+            message.channel.send(`https://www.twitch.tv/${Obj.streams[0].channel.name}`);
+          });
+          break;
+        }
+        default:
+          message.channel.send('Invalid Syntax! Try:\n`twitch {channel | game | stream} {channelName | gameName | streamName}` to search for a channel, game or stream on twitch');
       }
-      case 'game': {
-        args.splice(0, 2);
-        let s = args.join('%20');
-        s = s.replace(/,/gu, '%2C');
-        s = s.replace(/\|/gu, '%7C');
-        s = s.replace(/"/gu, '%22');
-        s = s.replace(/</gu, '%3C');
-        s = s.replace(/>/gu, '%3E');
-        s = s.replace(/#/gu, '%23');
-        s = s.replace(/%/gu, '%25');
-        const url = `https://api.twitch.tv/kraken/search/games?query=${s}&client_id=${credentials.apiKeys.twitch}`;
-        request(url, (error, response, body) => {
-          const Obj = JSON.parse(body);
-          let x = Obj.games[0].name;
-          x = x.replace(/ /gu, '%20');
-          x = x.replace(/,/gu, '%2C');
-          x = x.replace(/\|/gu, '%7C');
-          x = x.replace(/"/gu, '%22');
-          x = x.replace(/</gu, '%3C');
-          x = x.replace(/>/gu, '%3E');
-          x = x.replace(/#/gu, '%23');
-          x = x.replace(/%/gu, '%25');
-          message.channel.send(`https://www.twitch.tv/directory/game/${x}`);
-        });
-        break;
-      }
-      case 'stream': {
-        args.splice(0, 2);
-        let s = args.join('%20');
-        s = s.replace(/,/gu, '%2C');
-        s = s.replace(/\|/gu, '%7C');
-        s = s.replace(/"/gu, '%22');
-        s = s.replace(/</gu, '%3C');
-        s = s.replace(/>/gu, '%3E');
-        s = s.replace(/#/gu, '%23');
-        s = s.replace(/%/gu, '%25');
-        const url = `https://api.twitch.tv/kraken/search/streams?query=${s}&limit=1&client_id=${credentials.apiKeys.twitch}`;
-        request(url, (error, response, body) => {
-          const Obj = JSON.parse(body);
-          message.channel.send(`https://www.twitch.tv/${Obj.streams[0].channel.name}`);
-        });
-        break;
-      }
-      default:
-        message.channel.send('Invalid Syntax!');
     }
   },
   urban (args, message) {
@@ -314,7 +358,7 @@ module.exports = {
   },
   weather (args, message) {
     if (args.length == 1) {
-      message.channel.send('Invalid Syntax! Try:\n`weather {location}` to desplay a detailed embed of location\'s weather');
+      message.channel.send('Invalid Syntax! Try:\n`weather {location}` to display a detailed embed of location\'s weather');
     } else {
       args.splice(0, 1);
       const s = args.join('%20');
@@ -356,16 +400,20 @@ module.exports = {
     }
   },
   yt (args, message) {
-    args.splice(0, 1);
-    const s = args.join(' ');
-    const url = `https://www.googleapis.com/youtube/v3/search?q=${s}&part=snippet&maxResults=1&order=relevance&regionCode=US&safeSearch=moderate&key=${credentials.apiKeys.googleCloud}`;
-    request(url, (error, response, body) => {
-      const Obj = JSON.parse(body);
-      if (Object.prototype.hasOwnProperty.call(Obj.items[0].id, 'channelId')) {
-        message.channel.send(`https://www.youtube.com/channel/${Obj.items[0].id.channelId}`);
-      } else if (Object.prototype.hasOwnProperty.call(Obj.items[0].id, 'videoId')) {
-        message.channel.send(`https://www.youtube.com/watch?v=${Obj.items[0].id.videoId}`);
-      }
-    });
+    if (args.length == 1) {
+      message.channel.send('Invalid Syntax! Try:\n`yt {search term}` to display the most relevant search result (can be a video, a channel, a topic or a live stream)');
+    } else {
+      args.splice(0, 1);
+      const s = args.join(' ');
+      const url = `https://www.googleapis.com/youtube/v3/search?q=${s}&part=snippet&maxResults=1&order=relevance&regionCode=US&safeSearch=moderate&key=${credentials.apiKeys.googleCloud}`;
+      request(url, (error, response, body) => {
+        const Obj = JSON.parse(body);
+        if (Object.prototype.hasOwnProperty.call(Obj.items[0].id, 'channelId')) {
+          message.channel.send(`https://www.youtube.com/channel/${Obj.items[0].id.channelId}`);
+        } else if (Object.prototype.hasOwnProperty.call(Obj.items[0].id, 'videoId')) {
+          message.channel.send(`https://www.youtube.com/watch?v=${Obj.items[0].id.videoId}`);
+        }
+      });
+    }
   },
 };

@@ -73,7 +73,7 @@ client.on('message', (message) => {
       imgur: 1,
       maps: 1,
       reddit: 1,
-      stackov: 1,
+      stackex: 1,
       translate: 1,
       twitch: 1,
       urban: 1,
@@ -167,9 +167,9 @@ client.on('message', (message) => {
             message.channel.send('This command is disabled!');
           }
           break;
-        case 'stackov':
-          if (commands.stackov) {
-            integrations.stackov(args, message);
+        case 'stackex':
+          if (commands.stackex) {
+            integrations.stackex(args, message);
           } else {
             message.channel.send('This command is disabled!');
           }

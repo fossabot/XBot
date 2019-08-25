@@ -19,7 +19,10 @@ client.once('ready', () => {
 
 client.login(process.env.BOT_TOKEN);
 
-const pool = new Pool();
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: true,
+});
 
 client.on('guildCreate', (guild) => {
   const sql = 'INSERT INTO servers (id, prefix, disabled) VALUES ($1, \'!x\', \'\')';

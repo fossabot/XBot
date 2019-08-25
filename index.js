@@ -2,7 +2,7 @@
 const Discord = require('discord.js');
 const mysql = require('mysql');
 
-const credentials = require('./credentials.json');
+require('dotenv').config();
 
 const discord = require('./commands/discord');
 const fun = require('./commands/fun');
@@ -17,12 +17,12 @@ client.once('ready', () => {
   console.log('Ready!');
 });
 
-client.login(credentials.botToken);
+client.login(process.env.BOT_TOKEN);
 
 const con = mysql.createConnection({
   host: 'localhost',
-  user: credentials.mysql.user,
-  password: credentials.mysql.password,
+  user: process.env.MYSQL_USER,
+  password: process.env.MYSQL_PASSWORD,
   database: 'XBot',
 });
 
@@ -272,7 +272,7 @@ client.on('message', (message) => {
           }
           break;
         default:
-          message.channel.send('Invalid Syntax!');
+          message.channel.send('Invalid Syntax! Try:\n`help` to display a help embed or\n`help` {category} to display the list of commands from a category');
       }
     }
   });

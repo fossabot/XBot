@@ -5,7 +5,7 @@ const request = require('request');
 const Snoowrap = require('snoowrap');
 const ud = require('urban-dictionary');
 
-const credentials = require('../credentials.json');
+require('dotenv').config();
 
 module.exports = {
   dict (args, message) {
@@ -23,7 +23,7 @@ module.exports = {
     } else {
       args.splice(0, 1);
       const s = args.join('%20');
-      const url = `http://www.omdbapi.com/?apikey=${credentials.apiKeys.omdb}&s=${s}`;
+      const url = `http://www.omdbapi.com/?apikey=${process.env.API_KEYS_OMDB}&s=${s}`;
       request(url, (error, response, body) => {
         const Obj = JSON.parse(body);
         message.channel.send(`https://www.imdb.com/title/${Obj.Search[0].imdbID}`);
@@ -43,17 +43,17 @@ module.exports = {
           const sort = args[0].substring(1);
           args.splice(0, 1);
           const s = args.join(' ');
-          url = `https://api.imgur.com/3/gallery/search/${sort}?q=${s}&client_id=${credentials.oauth.imgur.clientId}`;
+          url = `https://api.imgur.com/3/gallery/search/${sort}?q=${s}&client_id=${process.env.OAUTH_IMGUR_CLIENT_ID}`;
         } else {
           const sort = args[0].substring(1);
           const range = args[1].substring(1);
           args.splice(0, 2);
           const s = args.join(' ');
-          url = `https://api.imgur.com/3/gallery/search/${sort}/${range}?q=${s}&client_id=${credentials.oauth.imgur.clientId}`;
+          url = `https://api.imgur.com/3/gallery/search/${sort}/${range}?q=${s}&client_id=${process.env.OAUTH_IMGUR_CLIENT_ID}`;
         }
       } else {
         const s = args.join(' ');
-        url = `https://api.imgur.com/3/gallery/search/time?q=${s}&client_id=${credentials.oauth.imgur.clientId}`;
+        url = `https://api.imgur.com/3/gallery/search/time?q=${s}&client_id=${process.env.OAUTH_IMGUR_CLIENT_ID}`;
       }
       request(url, (error, response, body) => {
         const Obj = JSON.parse(body);
@@ -65,7 +65,7 @@ module.exports = {
     const alg1 = (spliceIndex) => {
       args.splice(0, spliceIndex);
       const s = args.join('+');
-      const url = `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${s}&inputtype=textquery&fields=formatted_address&key=${credentials.apiKeys.googleCloud}`;
+      const url = `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${s}&inputtype=textquery&fields=formatted_address&key=${process.env.API_KEYS_GOOGLECLOUDPLATFORM}`;
       request(url, (error, response, body) => {
         const Obj = JSON.parse(body);
         // eslint-disable-next-line camelcase
@@ -92,9 +92,9 @@ module.exports = {
   reddit (args, message) {
     const r = new Snoowrap({
       userAgent: 'XBot',
-      clientId: credentials.oauth.reddit.clientId,
-      clientSecret: credentials.oauth.reddit.clientSecret,
-      refreshToken: credentials.oauth.reddit.refreshToken,
+      clientId: process.env.OAUTH_REDDIT_CLIENT_ID,
+      clientSecret: process.env.OAUTH_REDDIT_CLIENT_SECRET,
+      refreshToken: process.env.OAUTH_REDDIT_REFRESH_TOKEN,
     });
     const allTime = '-hour|-day|-week|-month|-year|-all';
     if (args.length == 1) {
@@ -264,7 +264,7 @@ module.exports = {
       const to = args[3].toLowerCase();
       args.splice(0, 4);
       const s = args.join(' ');
-      const url = `https://translate.yandex.net/api/v1.5/tr.json/translate?key=${credentials.apiKeys.yandexTranslate}&text=${s}&lang=${from}-${to}`;
+      const url = `https://translate.yandex.net/api/v1.5/tr.json/translate?key=${process.env.API_KEYS_YANDEXTRANSLATE}&text=${s}&lang=${from}-${to}`;
       request(url, (error, response, body) => {
         const Obj = JSON.parse(body);
         if (Obj.message === 'Invalid parameter: lang') {
@@ -285,7 +285,7 @@ module.exports = {
         case 'channel': {
           args.splice(0, 2);
           const s = encodeURIComponent(args.join(' '));
-          const url = `https://api.twitch.tv/kraken/search/channels?query=${s}&limit=1&client_id=${credentials.apiKeys.twitch}`;
+          const url = `https://api.twitch.tv/kraken/search/channels?query=${s}&limit=1&client_id=${process.env.API_KEYS_TWITCH}`;
           request(url, (error, response, body) => {
             const Obj = JSON.parse(body);
             if (Obj.channels === null) {
@@ -299,7 +299,7 @@ module.exports = {
         case 'game': {
           args.splice(0, 2);
           const s = encodeURIComponent(args.join('%20'));
-          const url = `https://api.twitch.tv/kraken/search/games?query=${s}&client_id=${credentials.apiKeys.twitch}`;
+          const url = `https://api.twitch.tv/kraken/search/games?query=${s}&client_id=${process.env.API_KEYS_TWITCH}`;
           request(url, (error, response, body) => {
             const Obj = JSON.parse(body);
             if (Obj.games === null) {
@@ -314,7 +314,7 @@ module.exports = {
         case 'stream': {
           args.splice(0, 2);
           const s = encodeURIComponent(args.join(' '));
-          const url = `https://api.twitch.tv/kraken/search/streams?query=${s}&limit=1&client_id=${credentials.apiKeys.twitch}`;
+          const url = `https://api.twitch.tv/kraken/search/streams?query=${s}&limit=1&client_id=${process.env.API_KEYS_TWITCH}`;
           request(url, (error, response, body) => {
             const Obj = JSON.parse(body);
             if (Obj.streams === null) {
@@ -362,7 +362,7 @@ module.exports = {
     } else {
       args.splice(0, 1);
       const s = args.join('%20');
-      const url = `https://api.openweathermap.org/data/2.5/weather?q=${s}&units=metric&APPID=${credentials.apiKeys.openWeather}`;
+      const url = `https://api.openweathermap.org/data/2.5/weather?q=${s}&units=metric&APPID=${process.env.API_KEYS_OPENWEATHER}`;
       request(url, (error, response, body) => {
         const Obj = JSON.parse(body);
         const sunrise = new Date(parseInt(Obj.sys.sunrise, 10) * 1000 + Obj.timezone / 1000);
@@ -385,7 +385,7 @@ module.exports = {
           .setTitle(`Weather in ${Obj.name}, ${Obj.sys.country}`)
           .setDescription(`${Obj.main.temp}°C`)
           .setURL(`https://openweathermap.org/city/${Obj.id}`)
-          .addField(`Weather:${Obj.weather[0].main}`, Obj.weather[0].description)
+          .addField(`Weather: ${Obj.weather[0].main}`, Obj.weather[0].description)
           .addField('Wind: ', `Speed = ${Obj.wind.speed} meters/sec, Direction = ${Obj.wind.deg}°`, true)
           .addField('Cloudiness: ', `${Obj.clouds.all}%`, true)
           .addField('Pressure: ', `${Obj.main.pressure} hPa`, true)
@@ -405,7 +405,7 @@ module.exports = {
     } else {
       args.splice(0, 1);
       const s = args.join(' ');
-      const url = `https://www.googleapis.com/youtube/v3/search?q=${s}&part=snippet&maxResults=1&order=relevance&regionCode=US&safeSearch=moderate&key=${credentials.apiKeys.googleCloud}`;
+      const url = `https://www.googleapis.com/youtube/v3/search?q=${s}&part=snippet&maxResults=1&order=relevance&regionCode=US&safeSearch=moderate&key=${process.env.API_KEYS_GOOGLECLOUDPLATFORM}`;
       request(url, (error, response, body) => {
         const Obj = JSON.parse(body);
         if (Object.prototype.hasOwnProperty.call(Obj.items[0].id, 'channelId')) {

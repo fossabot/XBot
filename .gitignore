@@ -93,5 +93,5 @@ typings/
 # The eslint configuration
 /.eslintrc.json
 
-# Credentials
-/credentials.json
+# Environment Variables
+/.env

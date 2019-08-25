@@ -80,7 +80,7 @@ module.exports = {
       message.channel.send(url);
     };
     if (args.length == 1) {
-      message.channel.send('Invalid Syntax! Try:\n`maps {[OPTIONAL] alg1 (default) | alg2} {location}` to display the map of a location\n**You can specify which algorithm to use (in case the other one fails');
+      message.channel.send('Invalid Syntax! Try:\n`maps {[OPTIONAL] alg1 (default) | alg2} {location}` to display the map of a location\n**You can specify which algorithm to use (in case the other one fails**');
     } else if (args[1] == 'alg1') {
       alg1(2);
     } else if (args[1] == 'alg2') {

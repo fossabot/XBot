@@ -15,7 +15,9 @@ module.exports = {
       } else {
         const sql = 'UPDATE servers SET disabled = $1 WHERE id = $2';
         const inserts = [disabledString + args[1], message.guild.id];
-        pool.query(sql, inserts);
+        pool.query(sql, inserts).catch((err) => {
+          console.error(err);
+        });
         message.channel.send(`Succesfully disabled:\n\`${args[1]}\``);
       }
     } else {
@@ -37,7 +39,9 @@ module.exports = {
         disabledStr = disabledStr.replace(/\s+/gu, ' ');
         const sql = 'UPDATE servers SET disabled = $1 WHERE id = $2';
         const inserts = [disabledStr, message.guild.id];
-        pool.query(sql, inserts);
+        pool.query(sql, inserts).catch((err) => {
+          console.error(err);
+        });
         message.channel.send(`Succesfully enabled:\n\`${args[1]}\``);
       } else {
         message.channel.send('This command is not disabled!');
@@ -214,7 +218,9 @@ module.exports = {
       const s = args.join(' ');
       const sql = 'UPDATE servers SET prefix = $1 WHERE id = $2';
       const inserts = [s, message.guild.id];
-      pool.query(sql, inserts);
+      pool.query(sql, inserts).catch((err) => {
+        console.error(err);
+      });
       message.channel.send(`Changed prefix to:\n\`${s}\``);
     } else {
       message.channel.send('You don\'t have the necessary permissions!');

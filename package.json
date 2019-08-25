@@ -5,6 +5,9 @@
   "main": "index.js",
   "author": "Paul Soporan",
   "license": "GNU Lesser General Public License v3.0",
+  "scripts": {
+    "start": "node index.js"
+  },
   "dependencies": {
     "discord.js": "^11.5.1",
     "eslint": "^6.2.1",

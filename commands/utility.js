@@ -1,8 +1,7 @@
 const Discord = require('discord.js');
-const mysql = require('mysql');
 
 module.exports = {
-  disable (args, message, con, disabledString, commands) {
+  disable (args, message, pool, disabledString, commands) {
     args[1] = args[1].toLowerCase();
     if (args.length != 2) {
       message.channel.send('Invalid Syntax! Try:\n`disable {command}` to disable a command');
@@ -14,21 +13,16 @@ module.exports = {
       if (disabledString.includes(args[1])) {
         message.channel.send('This command is already disabled!');
       } else {
-        let sql = 'UPDATE ?? SET disabled = ? WHERE id = ?';
-        const inserts = ['servers', disabledString + args[1], message.guild.id];
-        sql = mysql.format(sql, inserts);
-        con.query(sql, (err) => {
-          if (err) {
-            throw err;
-          }
-          message.channel.send(`Succesfully disabled:\n\`${args[1]}\``);
-        });
+        const sql = 'UPDATE servers SET disabled = $1 WHERE id = $2';
+        const inserts = [disabledString + args[1], message.guild.id];
+        pool.query(sql, inserts);
+        message.channel.send(`Succesfully disabled:\n\`${args[1]}\``);
       }
     } else {
       message.channel.send('You don\'t have the necessary permissions!');
     }
   },
-  enable (args, message, con, disabledString, commands) {
+  enable (args, message, pool, disabledString, commands) {
     args[1] = args[1].toLowerCase();
     if (args.length != 2) {
       message.channel.send('Invalid Syntax! Try:\n`enable {command}` to enable a command');
@@ -41,15 +35,10 @@ module.exports = {
         let disabledStr = disabledString;
         disabledStr = disabledStr.replace(args[1], '');
         disabledStr = disabledStr.replace(/\s+/gu, ' ');
-        let sql = 'UPDATE ?? SET disabled = ? WHERE id =  ?';
-        const inserts = ['servers', disabledStr, message.guild.id];
-        sql = mysql.format(sql, inserts);
-        con.query(sql, (err) => {
-          if (err) {
-            throw err;
-          }
-          message.channel.send(`Succesfully enabled:\n\`${args[1]}\``);
-        });
+        const sql = 'UPDATE servers SET disabled = $1 WHERE id = $2';
+        const inserts = [disabledStr, message.guild.id];
+        pool.query(sql, inserts);
+        message.channel.send(`Succesfully enabled:\n\`${args[1]}\``);
       } else {
         message.channel.send('This command is not disabled!');
       }
@@ -217,20 +206,15 @@ module.exports = {
       message.channel.send('Invalid Syntax! Try:\n`help` to display a help embed or\n`help` {category} to display the list of commands from a category');
     }
   },
-  prefix (args, message, con) {
+  prefix (args, message, pool) {
     if (args.length < 2) {
       message.channel.send('Invalid Syntax! The new prefix is missing. Try:\n`prefix {new prefix}` to change the prefix');
     } else if (message.member.hasPermission('MANAGE_GUILD')) {
       args.splice(0, 1);
       const s = args.join(' ');
-      let sql = 'UPDATE ?? SET prefix = ? WHERE id = ?';
-      const inserts = ['servers', s, message.guild.id];
-      sql = mysql.format(sql, inserts);
-      con.query(sql, (err) => {
-        if (err) {
-          throw err;
-        }
-      });
+      const sql = 'UPDATE servers SET prefix = $1 WHERE id = $2';
+      const inserts = [s, message.guild.id];
+      pool.query(sql, inserts);
       message.channel.send(`Changed prefix to:\n\`${s}\``);
     } else {
       message.channel.send('You don\'t have the necessary permissions!');

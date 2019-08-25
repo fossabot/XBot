@@ -1,6 +1,6 @@
 /* eslint-disable sort-keys */
 const Discord = require('discord.js');
-const mysql = require('mysql');
+const {Pool} = require('pg');
 
 require('dotenv').config();
 
@@ -19,48 +19,29 @@ client.once('ready', () => {
 
 client.login(process.env.BOT_TOKEN);
 
-const con = mysql.createConnection({
-  host: 'localhost',
-  user: process.env.MYSQL_USER,
-  password: process.env.MYSQL_PASSWORD,
-  database: 'XBot',
-});
+const pool = new Pool();
 
 client.on('guildCreate', (guild) => {
-  let sql = 'INSERT INTO ?? (??, ??, ??) VALUES (?, \'!x\', \'\')';
-  const inserts = ['servers', 'id', 'prefix', 'disabled', guild.id];
-  sql = mysql.format(sql, inserts);
-  con.query(sql, (err) => {
-    if (err) {
-      throw err;
-    }
-  });
+  const sql = 'INSERT INTO servers (id, prefix, disabled) VALUES ($1, \'!x\', \'\')';
+  const inserts = [guild.id];
+  pool.query(sql, inserts);
 });
 
 client.on('guildDelete', (guild) => {
-  let sql = 'DELETE FROM ?? WHERE id = ?';
-  const inserts = ['servers', guild.id];
-  sql = mysql.format(sql, inserts);
-  con.query(sql, (err) => {
-    if (err) {
-      throw err;
-    }
-  });
+  const sql = 'DELETE FROM servers WHERE id = $1';
+  const inserts = [guild.id];
+  pool.query(sql, inserts);
 });
 
 client.on('message', (message) => {
   if (!message.guild) {
     return;
   }
-  let sql = 'SELECT ??, ?? FROM ?? WHERE id = ?';
-  const inserts = ['prefix', 'disabled', 'servers', message.guild.id];
-  sql = mysql.format(sql, inserts);
-  con.query(sql, (err, result) => {
-    if (err) {
-      throw err;
-    }
-    const pref = result[0].prefix;
-    const disabledString = result[0].disabled;
+  const sql = 'SELECT prefix, disabled FROM servers WHERE id = $1';
+  const inserts = [message.guild.id];
+  pool.query(sql, inserts).then((result) => {
+    const pref = result.rows[0].prefix;
+    const disabledString = result.rows[0].disabled;
     const disabled = disabledString.split(' ');
     const commands = {
       avatar: 1,
@@ -93,7 +74,6 @@ client.on('message', (message) => {
     for (let i = 0; i < disabled.length; ++i) {
       commands[disabled[i]] = 0;
     }
-
     if (message.content.startsWith(pref)) {
       const args = message.content.substring(pref.length + 1).split(' ');
       switch (args[0]) {
@@ -252,10 +232,10 @@ client.on('message', (message) => {
           }
           break;
         case 'disable':
-          utility.disable(args, message, con, disabledString, commands);
+          utility.disable(args, message, pool, disabledString, commands);
           break;
         case 'enable':
-          utility.enable(args, message, con, disabledString, commands);
+          utility.enable(args, message, pool, disabledString, commands);
           break;
         case 'help':
           if (commands.help) {
@@ -266,7 +246,7 @@ client.on('message', (message) => {
           break;
         case 'prefix':
           if (commands.prefix) {
-            utility.prefix(args, message, con);
+            utility.prefix(args, message, pool);
           } else {
             message.channel.send('This command is disabled!');
           }

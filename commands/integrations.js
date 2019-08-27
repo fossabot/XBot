@@ -96,10 +96,10 @@ module.exports = {
       clientSecret: process.env.OAUTH_REDDIT_CLIENT_SECRET,
       refreshToken: process.env.OAUTH_REDDIT_REFRESH_TOKEN,
     });
-    const allTime = '-hour|-day|-week|-month|-year|-all';
+    const allTime = 'hour|day|week|month|year|all';
     if (args.length == 1) {
       message.channel.send('Invalid Syntax! Try:\n`reddit -rand {r/subredditName} to display a random submission from a subreddit`\n`reddit {-hot | -new | -rising} {r/subredditName} to display the newest, hottest or most rising submission from a subreddit`\n`reddit {-top | -controversial} {[OPTIONAL] -hour | -day | -week | -month | -year | -all (default)} {r/subredditName} to display the top or the most controversial post from a period of time`\n`reddit sub {r/subredditName}` to display a subreddit\n`reddit search {search term}` to search something on reddit');
-    } else if (args[1] == '-rand' && args[2].startsWith('r/')) {
+    } else if (args[1] == 'rand' && args[2].startsWith('r/')) {
       args.splice(0, 2);
       const s = args.join('%20');
       r.getSubreddit(s.substring(2))
@@ -107,7 +107,7 @@ module.exports = {
         .url.then((value) => {
           message.channel.send(value);
         });
-    } else if (args[1].toLowerCase() === '-hot') {
+    } else if (args[1].toLowerCase() === 'hot') {
       args.splice(0, 2);
       const s = args.join('%20');
       r.getSubreddit(s.substring(2))
@@ -115,7 +115,7 @@ module.exports = {
         .then((value) => {
           message.channel.send(value[0].url);
         });
-    } else if (args[1].toLowerCase() === '-new') {
+    } else if (args[1].toLowerCase() === 'new') {
       args.splice(0, 2);
       const s = args.join('%20');
       r.getSubreddit(s.substring(2))
@@ -123,10 +123,10 @@ module.exports = {
         .then((value) => {
           message.channel.send(value[0].url);
         });
-    } else if (args[1].toLowerCase() === '-top') {
+    } else if (args[1].toLowerCase() === 'top') {
       let time;
       if (allTime.includes(args[2].toLowerCase())) {
-        time = args[2].substring(1);
+        time = args[2];
         args.splice(0, 3);
       } else {
         time = 'all';
@@ -138,10 +138,10 @@ module.exports = {
         .then((value) => {
           message.channel.send(value[0].url);
         });
-    } else if (args[1].toLowerCase() === '-controversial') {
+    } else if (args[1].toLowerCase() === 'controversial') {
       let time;
       if (allTime.includes(args[2].toLowerCase())) {
-        time = args[2].substring(1);
+        time = args[2];
         args.splice(0, 3);
       } else {
         time = 'all';
@@ -153,7 +153,7 @@ module.exports = {
         .then((value) => {
           message.channel.send(value[0].url);
         });
-    } else if (args[1].toLowerCase() === '-rising') {
+    } else if (args[1].toLowerCase() === 'rising') {
       args.splice(0, 2);
       const s = args.join('%20');
       r.getSubreddit(s.substring(2))
@@ -188,10 +188,10 @@ module.exports = {
         },
         (error, response, body) => {
           const stackExchangeSites = JSON.parse(body);
-          let site = args[1];
+          let site = args[1].toLowerCase();
           const isValid = stackExchangeSites.items.some((elem) => site === elem.api_site_parameter);
-          const allSort = '-activity|-creation|-votes|-relevance';
-          const allOrder = '-asc|-desc';
+          const allSort = 'activity|creation|votes|relevance';
+          const allOrder = 'asc|desc';
           if (isValid) {
             if (allSort.includes(args[2])) {
               const sort = args[2];
@@ -204,14 +204,14 @@ module.exports = {
                 const order = args[0];
                 args.splice(0, 1);
                 const s = args.join(' ');
-                url = `https://api.stackexchange.com/2.2/search?pagesize=1&order=${order.substring(1)}&sort=${sort.substring(1)}&intitle=${s}&site=${site}`;
+                url = `https://api.stackexchange.com/2.2/search?pagesize=1&order=${order}&sort=${sort}&intitle=${s}&site=${site}`;
               } else {
                 if (args.length == 0) {
                   message.channel.send('Invalid Syntax! Try:\n`stackex {[OPTIONAL] site (default:stackoverflow)} {[OPTIONAL] -activity | -creation | -votes | -relevance (default)} {[OPTIONAL -asc | -desc (default)]} {search term}` to search a question on one of the Stack Exchange sites');
                   return;
                 }
                 const s = args.join(' ');
-                url = `https://api.stackexchange.com/2.2/search?pagesize=1&order=desc&sort=${sort.substring(1)}&intitle=${s}&site=${site}`;
+                url = `https://api.stackexchange.com/2.2/search?pagesize=1&order=desc&sort=${sort}&intitle=${s}&site=${site}`;
               }
             } else {
               args.splice(0, 2);

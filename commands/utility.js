@@ -54,7 +54,7 @@ module.exports = {
     const categories = 'discord|fun|integrations|productivity|utility';
     if (categories.includes(args[1])) {
       // eslint-disable-next-line default-case
-      switch (args[1]) {
+      switch (args[1].toLowerCase()) {
         case 'discord': {
           const discordCommands = new Discord.RichEmbed()
             .setColor('#3256a8')
@@ -202,6 +202,7 @@ module.exports = {
         .setThumbnail('attachment://icon.png')
         .setTitle('Help')
         .setDescription('`help` {category} to display the list of commands from a category')
+        .addField('Categories:', '* Discord\n* Fun\n* Integrations\n* Productivity\n* Utility')
         .setURL('https://github.com/paul-soporan/XBot/blob/master/README.md')
         .setTimestamp()
         .setFooter('https://github.com/paul-soporan/XBot', 'attachment://icon.png');

@@ -80,9 +80,9 @@ client.on('message', (message) => {
         help: 1,
         prefix: 1,
       };
-      for (let i = 0; i < disabled.length; ++i) {
-        commands[disabled[i]] = 0;
-      }
+      disabled.forEach((command) => {
+        commands[command] = 0;
+      });
       if (message.content.startsWith(pref)) {
         const args = message.content.substring(pref.length + 1).split(' ');
         switch (args[0]) {

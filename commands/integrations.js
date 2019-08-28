@@ -10,7 +10,7 @@ require('dotenv').config();
 module.exports = {
   dict (args, message) {
     if (args.length == 1) {
-      message.channel.send('Invalid Syntax! Try:\n`dict {word(s)}` to get the definition of a word(/of some words)');
+      message.channel.send('Invalid Syntax! Try:\n* **`dict <word>`**\n  - **to display the definition of a word from the Merriam-Webster Dictionary: https://www.merriam-webster.com/**');
     } else {
       args.splice(0, 1);
       const s = args.join('%20');
@@ -19,7 +19,7 @@ module.exports = {
   },
   imdb (args, message) {
     if (args.length == 1) {
-      message.channel.send('Invalid Syntax! Try:\n`imdb {movie title}` to search for a movie on IMDb');
+      message.channel.send('Invalid Syntax! Try:\n* **`imdb <movie title>`**\n  - **to display information about a movie from IMDb: https://www.imdb.com/**');
     } else {
       args.splice(0, 1);
       const s = args.join('%20');
@@ -32,7 +32,7 @@ module.exports = {
   },
   imgur (args, message) {
     if (args.length == 1) {
-      message.channel.send('Invalid Syntax! Try:\n`imgur {[OPTIONAL] time (default)| viral | top} {[OPTIONAL] (if top) -> day | week | month | year | all (default)} {search term(s)}` to search images on imgur');
+      message.channel.send('Invalid Syntax! Try:\n* **`imgur <search term(s)>`**\n  - **to display the most relevant image from imgur: https://imgur.com, sorting by time**\n* **`imgur <sort> <search term(s)>`**\n  - **where `<sort>` must be `time | viral | top`**\n  - **to display the most relevant image from imgur: https://imgur.com, sorting by `<sort>`**\n  - **if `<sort>` is `top`, the time period is `all`**\n* **`imgur top <time> <search term(s)>`**\n  - **where `<time>` must be `day | week | month | year | all`**\n  - **to display the most relevant image from imgur: https://imgur.com, sorting by `top`, in the time period of `<time>`**');
     } else {
       args.splice(0, 1);
       const allSort = '-time|-viral|-top';
@@ -80,7 +80,7 @@ module.exports = {
       message.channel.send(url);
     };
     if (args.length == 1) {
-      message.channel.send('Invalid Syntax! Try:\n`maps {[OPTIONAL] alg1 (default) | alg2} {location}` to display the map of a location\n**You can specify which algorithm to use (in case the other one fails**');
+      message.channel.send('Invalid Syntax! Try:\n* **`maps <location>`**\n  - **to display the map of a location from Google Maps: https://www.google.com/maps/**\n  - **uses alg1**\n* **`maps <algorithm> <location>`**\n  - **where `<algorithm>` must be `alg1 | alg2`**\n  - **to display the map of a location from Google Maps: https://www.google.com/maps/ using a specific algorithm**\n  - **you can specify which algorithm to use (in case the other one fails)**');
     } else if (args[1] == 'alg1') {
       alg1(2);
     } else if (args[1] == 'alg2') {
@@ -98,7 +98,7 @@ module.exports = {
     });
     const allTime = 'hour|day|week|month|year|all';
     if (args.length == 1) {
-      message.channel.send('Invalid Syntax! Try:\n`reddit -rand {r/subredditName} to display a random submission from a subreddit`\n`reddit {-hot | -new | -rising} {r/subredditName} to display the newest, hottest or most rising submission from a subreddit`\n`reddit {-top | -controversial} {[OPTIONAL] -hour | -day | -week | -month | -year | -all (default)} {r/subredditName} to display the top or the most controversial post from a period of time`\n`reddit sub {r/subredditName}` to display a subreddit\n`reddit search {search term}` to search something on reddit');
+      message.channel.send('Invalid Syntax! Try:\n* **`reddit rand r/<subreddit>`**\n  - **to display a random post from a subreddit**\n* **`reddit <sort> r/<subreddit>`**\n  - **where `<sort>` must be `hot | new | top | controversial | rising`**\n  - **to display the most relevant post from a subreddit, sorting by `<sort>`**\n  - **if `<sort>` is `top | controversial`, the time period is `all`**\n* **`reddit <sort> <time> r/<subreddit>`**\n  - **where `<sort>` must be `top | controversial`**\n  - **where `<time>` must be `hour | day | week | month | year | all`**\n  - **to display the most relevant post from a subreddit, sorting by `<sort>`, in the time period of `<time>`**\n* **`reddit sub r/<subreddit>`**\n  - **to display a link to a subreddit**\n* **`reddit search <search term(s)>`**\n  - **to display a link to the search results corresponding to the `<search result>` parameter**');
     } else if (args[1] == 'rand' && args[2].startsWith('r/')) {
       args.splice(0, 2);
       const s = args.join('%20');
@@ -170,12 +170,12 @@ module.exports = {
       const s = args.join('%20');
       message.channel.send(`https://www.reddit.com/search/?q=${s}`);
     } else {
-      message.channel.send('Invalid Syntax! Try:\n`reddit -rand {r/subredditName} to display a random submission from a subreddit`\n`reddit {-hot | -new | -rising} {r/subredditName} to display the newest, hottest or most rising submission from a subreddit`\n`reddit {-top | -controversial} {[OPTIONAL] -hour | -day | -week | -month | -year | -all (default)} {r/subredditName} to display the top or the most controversial post from a period of time`\n`reddit sub {r/subredditName}` to display a subreddit\n`reddit search {search term}` to search something on reddit');
+      message.channel.send('Invalid Syntax! Try:\n* **`reddit rand r/<subreddit>`**\n  - **to display a random post from a subreddit**\n* **`reddit <sort> r/<subreddit>`**\n  - **where `<sort>` must be `hot | new | top | controversial | rising`**\n  - **to display the most relevant post from a subreddit, sorting by `<sort>`**\n  - **if `<sort>` is `top | controversial`, the time period is `all`**\n* **`reddit <sort> <time> r/<subreddit>`**\n  - **where `<sort>` must be `top | controversial`**\n  - **where `<time>` must be `hour | day | week | month | year | all`**\n  - **to display the most relevant post from a subreddit, sorting by `<sort>`, in the time period of `<time>`**\n* **`reddit sub r/<subreddit>`**\n  - **to display a link to a subreddit**\n* **`reddit search <search term(s)>`**\n  - **to display a link to the search results corresponding to the `<search result>` parameter**');
     }
   },
   stackex (args, message) {
     if (args.length < 2) {
-      message.channel.send('Invalid Syntax! Try:\n`stackex {[OPTIONAL] site (default:stackoverflow)} {[OPTIONAL] -activity | -creation | -votes | -relevance (default)} {[OPTIONAL -asc | -desc (default)]} {search term}` to search a question on one of the Stack Exchange sites');
+      message.channel.send('Invalid Syntax! Try:\n* **`stackex <search term(s)>`**\n  - **to display the most relevant question from Stack Overflow: https://stackoverflow.com/ - the default site**\n  - **by default, the sorting is by `relevance`**\n  - **by default, the sorting direction is `desc` (descendent)**\n* **`stackex <site> <search term(s)>`**\n  - **where `<site>` must be the concatenated name of any Stack Exchage Site: https://stackexchange.com/sites**\n  - **to display the most relevant question from a Stack Exchange: https://stackexchange.com/ site**\n  - **by default, the sorting is by `relevance`**\n  - **by default, the sorting direction is `desc` (descendent)**\n* **`stackex <site> <sort> <search term(s)>`**\n  - **where `<site>` must be the concatenated name of any Stack Exchage Site: https://stackexchange.com/sites**\n  - **where `<sort>` must be `activity | creation | votes | relevance`**\n  - **to display the most relevant question from a Stack Exchange: https://stackexchange.com/ site, sorting by `<sort>`**\n  - **by default, the sorting direction is `desc` (descendent)**\n* **`stackex <site> <sort> <direction> <search term(s)>`**\n  - **where `<site>` must be the concatenated name of any Stack Exchage Site: https://stackexchange.com/sites**\n  - **where `<sort>` must be `activity | creation | votes | relevance`**\n  - **where `<direction>` must be `asc` (ascendent) `|` `desc` (descendent)**\n  - **to display the most relevant question from a Stack Exchange: https://stackexchange.com/ site, sorting by `<sort>` in the direction `<direction>`**');
     } else {
       let url = 'https://api.stackexchange.com/2.2/sites';
       request.get(
@@ -198,7 +198,7 @@ module.exports = {
               args.splice(0, 3);
               if (allOrder.includes(args[0])) {
                 if (args.length == 1) {
-                  message.channel.send('Invalid Syntax! Try:\n`stackex {[OPTIONAL] site (default:stackoverflow)} {[OPTIONAL] -activity | -creation | -votes | -relevance (default)} {[OPTIONAL -asc | -desc (default)]} {search term}` to search a question on one of the Stack Exchange sites');
+                  message.channel.send('Invalid Syntax! Try:\n* **`stackex <search term(s)>`**\n  - **to display the most relevant question from Stack Overflow: https://stackoverflow.com/ - the default site**\n  - **by default, the sorting is by `relevance`**\n  - **by default, the sorting direction is `desc` (descendent)**\n* **`stackex <site> <search term(s)>`**\n  - **where `<site>` must be the concatenated name of any Stack Exchage Site: https://stackexchange.com/sites**\n  - **to display the most relevant question from a Stack Exchange: https://stackexchange.com/ site**\n  - **by default, the sorting is by `relevance`**\n  - **by default, the sorting direction is `desc` (descendent)**\n* **`stackex <site> <sort> <search term(s)>`**\n  - **where `<site>` must be the concatenated name of any Stack Exchage Site: https://stackexchange.com/sites**\n  - **where `<sort>` must be `activity | creation | votes | relevance`**\n  - **to display the most relevant question from a Stack Exchange: https://stackexchange.com/ site, sorting by `<sort>`**\n  - **by default, the sorting direction is `desc` (descendent)**\n* **`stackex <site> <sort> <direction> <search term(s)>`**\n  - **where `<site>` must be the concatenated name of any Stack Exchage Site: https://stackexchange.com/sites**\n  - **where `<sort>` must be `activity | creation | votes | relevance`**\n  - **where `<direction>` must be `asc` (ascendent) `|` `desc` (descendent)**\n  - **to display the most relevant question from a Stack Exchange: https://stackexchange.com/ site, sorting by `<sort>` in the direction `<direction>`**');
                   return;
                 }
                 const order = args[0];
@@ -207,7 +207,7 @@ module.exports = {
                 url = `https://api.stackexchange.com/2.2/search?pagesize=1&order=${order}&sort=${sort}&intitle=${s}&site=${site}`;
               } else {
                 if (args.length == 0) {
-                  message.channel.send('Invalid Syntax! Try:\n`stackex {[OPTIONAL] site (default:stackoverflow)} {[OPTIONAL] -activity | -creation | -votes | -relevance (default)} {[OPTIONAL -asc | -desc (default)]} {search term}` to search a question on one of the Stack Exchange sites');
+                  message.channel.send('Invalid Syntax! Try:\n* **`stackex <search term(s)>`**\n  - **to display the most relevant question from Stack Overflow: https://stackoverflow.com/ - the default site**\n  - **by default, the sorting is by `relevance`**\n  - **by default, the sorting direction is `desc` (descendent)**\n* **`stackex <site> <search term(s)>`**\n  - **where `<site>` must be the concatenated name of any Stack Exchage Site: https://stackexchange.com/sites**\n  - **to display the most relevant question from a Stack Exchange: https://stackexchange.com/ site**\n  - **by default, the sorting is by `relevance`**\n  - **by default, the sorting direction is `desc` (descendent)**\n* **`stackex <site> <sort> <search term(s)>`**\n  - **where `<site>` must be the concatenated name of any Stack Exchage Site: https://stackexchange.com/sites**\n  - **where `<sort>` must be `activity | creation | votes | relevance`**\n  - **to display the most relevant question from a Stack Exchange: https://stackexchange.com/ site, sorting by `<sort>`**\n  - **by default, the sorting direction is `desc` (descendent)**\n* **`stackex <site> <sort> <direction> <search term(s)>`**\n  - **where `<site>` must be the concatenated name of any Stack Exchage Site: https://stackexchange.com/sites**\n  - **where `<sort>` must be `activity | creation | votes | relevance`**\n  - **where `<direction>` must be `asc` (ascendent) `|` `desc` (descendent)**\n  - **to display the most relevant question from a Stack Exchange: https://stackexchange.com/ site, sorting by `<sort>` in the direction `<direction>`**');
                   return;
                 }
                 const s = args.join(' ');
@@ -250,7 +250,7 @@ module.exports = {
               }
             );
           } else {
-            message.channel.send('Invalid Syntax! Try:\n`stackex {[OPTIONAL] site (default:stackoverflow)} {[OPTIONAL] -activity | -creation | -votes | -relevance (default)} {[OPTIONAL -asc | -desc (default)]} {search term}` to search a question on one of the Stack Exchange sites');
+            message.channel.send('Invalid Syntax! Try:\n* **`stackex <search term(s)>`**\n  - **to display the most relevant question from Stack Overflow: https://stackoverflow.com/ - the default site**\n  - **by default, the sorting is by `relevance`**\n  - **by default, the sorting direction is `desc` (descendent)**\n* **`stackex <site> <search term(s)>`**\n  - **where `<site>` must be the concatenated name of any Stack Exchage Site: https://stackexchange.com/sites**\n  - **to display the most relevant question from a Stack Exchange: https://stackexchange.com/ site**\n  - **by default, the sorting is by `relevance`**\n  - **by default, the sorting direction is `desc` (descendent)**\n* **`stackex <site> <sort> <search term(s)>`**\n  - **where `<site>` must be the concatenated name of any Stack Exchage Site: https://stackexchange.com/sites**\n  - **where `<sort>` must be `activity | creation | votes | relevance`**\n  - **to display the most relevant question from a Stack Exchange: https://stackexchange.com/ site, sorting by `<sort>`**\n  - **by default, the sorting direction is `desc` (descendent)**\n* **`stackex <site> <sort> <direction> <search term(s)>`**\n  - **where `<site>` must be the concatenated name of any Stack Exchage Site: https://stackexchange.com/sites**\n  - **where `<sort>` must be `activity | creation | votes | relevance`**\n  - **where `<direction>` must be `asc` (ascendent) `|` `desc` (descendent)**\n  - **to display the most relevant question from a Stack Exchange: https://stackexchange.com/ site, sorting by `<sort>` in the direction `<direction>`**');
           }
         }
       );
@@ -258,7 +258,7 @@ module.exports = {
   },
   translate (args, message) {
     if (args.length < 5 || !args[2] == 'to') {
-      message.channel.send('Invalid Syntax! Try:\n`translate {langFrom} to {langTo} {word/sentence}` to translate words and sentences between languages');
+      message.channel.send('Invalid Syntax! Try:\n* **`translate <language code> to <language code> <text>`**\n  - **where `<language code>` must be the code of a language from the [Supported languages Section](https://tech.yandex.com/translate/doc/dg/concepts/api-overview-docpage/)**\n  - **to translate words and sentences between languages**\n  - **Powered by Yandex.Translate**\n  - **http://translate.yandex.com**');
     } else {
       const from = args[1].toLowerCase();
       const to = args[3].toLowerCase();
@@ -279,7 +279,7 @@ module.exports = {
   },
   twitch (args, message) {
     if (args.length < 3) {
-      message.channel.send('Invalid Syntax! Try:\n`twitch {channel | game | stream} {channelName | gameName | streamName}` to search for a channel, game or stream on twitch');
+      message.channel.send('Invalid Syntax! Try:\n* **`twitch channel <name>`**\n  - **to display the most relevant Twitch: (https://www.twitch.tv) channel**\n* **`twitch game <name>`**\n  - **to display the most relevant Twitch: (https://www.twitch.tv) game**\n* **`twitch stream <name>`**\n  - **to display the most relevant Twitch (https://www.twitch.tv) stream**');
     } else {
       switch (args[1]) {
         case 'channel': {
@@ -326,13 +326,13 @@ module.exports = {
           break;
         }
         default:
-          message.channel.send('Invalid Syntax! Try:\n`twitch {channel | game | stream} {channelName | gameName | streamName}` to search for a channel, game or stream on twitch');
+          message.channel.send('Invalid Syntax! Try:\n* **`twitch channel <name>`**\n  - **to display the most relevant Twitch: (https://www.twitch.tv) channel**\n* **`twitch game <name>`**\n  - **to display the most relevant Twitch: (https://www.twitch.tv) game**\n* **`twitch stream <name>`**\n  - **to display the most relevant Twitch (https://www.twitch.tv) stream**');
       }
     }
   },
   urban (args, message) {
     if (args.length < 2) {
-      message.channel.send('Invalid Syntax! Try:\n`urban rand` to display a random definition\n`urban def {word/sequence}` to display the definition of a specific word or sequence');
+      message.channel.send('Invalid Syntax! Try:\n* **`urban rand`**\n  - **to display a random definition from the Urban Dictionary: https://www.urbandictionary.com/**\n* **`urban def <word>`**\n  - **to display the definition of a word from the Urban Dictionary: https://www.urbandictionary.com/**');
     } else if (args[1] == 'rand' && args.length == 2) {
       ud.random()
         .then((result) => {
@@ -353,12 +353,12 @@ module.exports = {
           message.channel.send('An error has occurred! Try again!');
         });
     } else {
-      message.channel.send('Invalid Syntax! Try:\n`urban rand` to display a random definition\n`urban def {word/sequence}` to display the definition of a specific word or sequence');
+      message.channel.send('Invalid Syntax! Try:\n* **`urban rand`**\n  - **to display a random definition from the Urban Dictionary: https://www.urbandictionary.com/**\n* **`urban def <word>`**\n  - **to display the definition of a word from the Urban Dictionary: https://www.urbandictionary.com/**');
     }
   },
   weather (args, message) {
     if (args.length == 1) {
-      message.channel.send('Invalid Syntax! Try:\n`weather {location}` to display a detailed embed of location\'s weather');
+      message.channel.send('Invalid Syntax! Try:\n* **`weather <location>`**\n  - **to display the detailed weather of a location using Open Weather: https://openweathermap.org/**');
     } else {
       args.splice(0, 1);
       const s = args.join('%20');
@@ -401,7 +401,7 @@ module.exports = {
   },
   yt (args, message) {
     if (args.length == 1) {
-      message.channel.send('Invalid Syntax! Try:\n`yt {search term}` to display the most relevant search result (can be a video, a channel, a topic or a live stream)');
+      message.channel.send('Invalid Syntax! Try:\n* **`yt <search term(s)>`**\n  - **to display the most relevant result from YouTube (https://www.youtube.com/) (a video, a channel, a topic or a live stream)**');
     } else {
       args.splice(0, 1);
       const s = args.join(' ');

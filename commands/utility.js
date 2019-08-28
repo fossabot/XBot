@@ -2,10 +2,12 @@ const Discord = require('discord.js');
 
 module.exports = {
   disable (args, message, pool, disabledString, commands) {
-    args[1] = args[1].toLowerCase();
     if (args.length != 2) {
-      message.channel.send('Invalid Syntax! Try:\n`disable {command}` to disable a command');
-    } else if (args[1] == 'enable' || args[1] == 'disable') {
+      message.channel.send('Invalid Syntax! Try:\n* **`disable <command>`**\n  - **where `<command>` must be a valid bot command**\n  - **to disable a command**');
+      return;
+    }
+    args[1] = args[1].toLowerCase();
+    if (args[1] == 'enable' || args[1] == 'disable') {
       message.channel.send('`enable` and `disable` can\'t be disabled!');
     } else if (!Object.prototype.hasOwnProperty.call(commands, args[1])) {
       message.channel.send('Please enter a valid command!');
@@ -25,10 +27,12 @@ module.exports = {
     }
   },
   enable (args, message, pool, disabledString, commands) {
-    args[1] = args[1].toLowerCase();
     if (args.length != 2) {
-      message.channel.send('Invalid Syntax! Try:\n`enable {command}` to enable a command');
-    } else if (args[1] == 'enable' || args[1] == 'disable') {
+      message.channel.send('Invalid Syntax! Try:\n* **`enable <command>`**\n  - **where `<command>` must be a valid bot command**\n  - **to enable a command**');
+      return;
+    }
+    args[1] = args[1].toLowerCase();
+    if (args[1] == 'enable' || args[1] == 'disable') {
       message.channel.send('`enable` and `disable` can\'t be enabled!');
     } else if (!Object.prototype.hasOwnProperty.call(commands, args[1])) {
       message.channel.send('Please enter a valid command!');
@@ -61,13 +65,16 @@ module.exports = {
             .attachFiles(['./assets/images/icon.png'])
             .setAuthor('XBot', 'attachment://icon.png', 'https://github.com/paul-soporan/XBot')
             .setThumbnail('attachment://icon.png')
-            .setTitle('Discord Commands')
-            .setURL('https://github.com/paul-soporan/XBot/blob/master/README.md')
+            .setTitle('Command Category: **Discord**')
+            .setURL('https://github.com/paul-soporan/XBot/wiki/Discord')
             .setDescription('List of Discord Commands:')
-            .addField('avatar', '`avatar {user mention}` to display a user\'s avatar or\n`avatar` to display your own avatar')
-            .addField('ban', '`ban {member mention}` to ban a member')
-            .addField('kick', '`kick {member mention}` to kick a member')
-            .addField('nick', '`nick {member mention} {new nickname}` to nickname a member')
+            .addField(
+              'avatar',
+              '\n* **`avatar <user mention>`**\n  - **to display a user\'s avatar**\n* **`avatar`**\n  - **to display your own avatar**'
+            )
+            .addField('***ban***', '\n* **`ban <member mention>`**\n  - **to ban a member**')
+            .addField('***kick***', '\n* **`kick <member mention>`**\n  - **to kick a member**')
+            .addField('***nick***', '\n* **`nick <member mention> <new nickname>`**\n  - **to nickname a member**')
             .setTimestamp()
             .setFooter('https://github.com/paul-soporan/XBot', 'attachment://icon.png');
           message.channel.send(discordCommands);
@@ -79,10 +86,10 @@ module.exports = {
             .attachFiles(['./assets/images/icon.png'])
             .setAuthor('XBot', 'attachment://icon', 'https://github.com/paul-soporan/XBot')
             .setThumbnail('attachment://icon.png')
-            .setTitle('Fun Commands')
-            .setDescription('List of Fun Commands: ')
-            .setURL('https://github.com/paul-soporan/XBot/blob/master/README.md')
-            .addField('ping', '`ping` to get a "pong" reply')
+            .setTitle('Command Category: **Fun**')
+            .setDescription('List of Fun Commands:')
+            .setURL('https://github.com/paul-soporan/XBot/wiki/Fun')
+            .addField('***ping***', '\n* **`ping`**\n  - **to get a "pong" reply**')
             .setTimestamp()
             .setFooter('https://github.com/paul-soporan/XBot', 'attachment://icon.png');
           message.channel.send(funCommands);
@@ -94,43 +101,52 @@ module.exports = {
             .attachFiles(['./assets/images/icon.png'])
             .setAuthor('XBot', 'attachment://icon', 'https://github.com/paul-soporan/XBot')
             .setThumbnail('attachment://icon.png')
-            .setTitle('Integrations Commands')
-            .setDescription('List of Integrations Commands: ')
-            .setURL('https://github.com/paul-soporan/XBot/blob/master/README.md')
-            .addField('dict', '`dict {word(s)}` to get the definition of a word(s)')
-            .addField('imdb', '`imdb {movie title}` to search for a movie on IMDb')
+            .setTitle('Command Category: **Integrations**')
+            .setDescription('List of Integrations Commands:')
+            .setURL('https://github.com/paul-soporan/XBot/wiki/Integrations')
             .addField(
-              'imgur',
-              'imgur: `imgur {[OPTIONAL] time (default)| viral | top} {[OPTIONAL] (if top) -> day | week | month | year | all (default)} {search term(s)}` to search images on imgur'
+              '***dict***',
+              '\n* **`dict <word>`**\n  - **to display the definition of a word from the Merriam-Webster Dictionary: https://www.merriam-webster.com/**'
             )
             .addField(
-              'maps',
-              '`maps {[OPTIONAL] alg1 (default) | alg2} {location}` to display the map of a location\n**You can specify which algorithm to use (in case the other one fails)**'
+              '***imdb***',
+              '\n* **`imdb <movie title>`**\n  - **to display information about a movie from IMDb: https://www.imdb.com/**'
             )
             .addField(
-              'reddit',
-              '`reddit -rand {r/subredditName}`\n`reddit {-hot | -new | -rising} {r/subredditName}`\n`reddit {-top | -controversial} {[OPTIONAL] -hour | -day | -week | -month | -year | -all (default)} {r/subredditName}`\n`reddit sub {r/subredditName}`\n`reddit search {search term}`'
+              '***imgur***',
+              '\n* **`imgur <search term(s)>`**\n  - **to display the most relevant image from imgur: https://imgur.com, sorting by time**\n* **`imgur <sort> <search term(s)>`**\n  - **where `<sort>` must be `time | viral | top`**\n  - **to display the most relevant image from imgur: https://imgur.com, sorting by `<sort>`**\n  - **if `<sort>` is `top`, the time period is `all`**\n* **`imgur top <time> <search term(s)>`**\n  - **where `<time>` must be `day | week | month | year | all`**\n  - **to display the most relevant image from imgur: https://imgur.com, sorting by `top`, in the time period of `<time>`**'
             )
             .addField(
-              'stackex',
-              '`stackex {[OPTIONAL] site (default:stackoverflow)} {[OPTIONAL] -activity | -creation | -votes | -relevance (default)} {[OPTIONAL -asc | -desc (default)]} {search term}` to search a question on one of the Stack Exchange sites'
+              '***maps***',
+              '\n* **`maps <location>`**\n  - **to display the map of a location from Google Maps: https://www.google.com/maps/**\n  - **uses alg1**\n* **`maps <algorithm> <location>`**\n  - **where `<algorithm>` must be `alg1 | alg2`**\n  - **to display the map of a location from Google Maps: https://www.google.com/maps/ using a specific algorithm**\n  - **you can specify which algorithm to use (in case the other one fails)**'
             )
             .addField(
-              'translate',
-              '`translate {langFrom} to {langTo} {word/sentences}` to translate words and sentences between languages'
+              '***reddit***',
+              '\n* **`reddit rand r/<subreddit>`**\n  - **to display a random post from a subreddit**\n* **`reddit <sort> r/<subreddit>`**\n  - **where `<sort>` must be `hot | new | top | controversial | rising`**\n  - **to display the most relevant post from a subreddit, sorting by `<sort>`**\n  - **if `<sort>` is `top | controversial`, the time period is `all`**\n* **`reddit <sort> <time> r/<subreddit>`**\n  - **where `<sort>` must be `top | controversial`**\n  - **where `<time>` must be `hour | day | week | month | year | all`**\n  - **to display the most relevant post from a subreddit, sorting by `<sort>`, in the time period of `<time>`**\n* **`reddit sub r/<subreddit>`**\n  - **to display a link to a subreddit**\n* **`reddit search <search term(s)>`**\n  - **to display a link to the search results corresponding to the `<search result>` parameter**'
             )
             .addField(
-              'twitch',
-              '`twitch {channel | game | stream} {channelName | gameName | streamName}` to search for a channel, game or stream on twitch'
+              '***stackex***',
+              '\n***The last two usages of this command didn\'t fit in this embed. You can see them at: https://github.com/paul-soporan/XBot/wiki/Integrations#stackex***\n* **`stackex <search term(s)>`**\n  - **to display the most relevant question from Stack Overflow: https://stackoverflow.com/ - the default site**\n  - **by default, the sorting is by `relevance`**\n  - **by default, the sorting direction is `desc` (descendent)**\n* **`stackex <site> <search term(s)>`**\n  - **where `<site>` must be the concatenated name of any Stack Exchage Site: https://stackexchange.com/sites**\n  - **to display the most relevant question from a Stack Exchange: https://stackexchange.com/ site**\n  - **by default, the sorting is by `relevance`**\n  - **by default, the sorting direction is `desc` (descendent)**'
             )
             .addField(
-              'urban',
-              '`urban rand` to display a random definition\n`urban def {word/sequence}` to display the definition of a specific word or sequence'
+              '***translate***',
+              '\n* **`translate <language code> to <language code> <text>`**\n  - **where `<language code>` must be the code of a language from the [Supported languages Section](https://tech.yandex.com/translate/doc/dg/concepts/api-overview-docpage/)**\n  - **to translate words and sentences between languages**\n  - **Powered by Yandex.Translate**\n  - **http://translate.yandex.com**'
             )
-            .addField('weather', '`weather {location}` to display a detailed embed of location\'s weather')
             .addField(
-              'yt',
-              '`yt {search term}` to display the most relevant search result (can be a video, a channel, a topic or a live stream)'
+              '***twitch***',
+              '\n* **`twitch channel <name>`**\n  - **to display the most relevant Twitch: (https://www.twitch.tv) channel**\n* **`twitch game <name>`**\n  - **to display the most relevant Twitch: (https://www.twitch.tv) game**\n* **`twitch stream <name>`**\n  - **to display the most relevant Twitch (https://www.twitch.tv) stream**'
+            )
+            .addField(
+              '***urban***',
+              '\n* **`urban rand`**\n  - **to display a random definition from the Urban Dictionary: https://www.urbandictionary.com/**\n* **`urban def <word>`**\n  - **to display the definition of a word from the Urban Dictionary: https://www.urbandictionary.com/**'
+            )
+            .addField(
+              '***weather***',
+              '\n* **`weather <location>`**\n  - **to display the detailed weather of a location using Open Weather: https://openweathermap.org/**'
+            )
+            .addField(
+              '***yt***',
+              '\n* **`yt <search term(s)>`**\n  - **to display the most relevant result from YouTube (https://www.youtube.com/) (a video, a channel, a topic or a live stream)**'
             )
             .setTimestamp()
             .setFooter('https://github.com/paul-soporan/XBot', 'attachment://icon.png');
@@ -143,30 +159,33 @@ module.exports = {
             .attachFiles(['./assets/images/icon.png'])
             .setAuthor('XBot', 'attachment://icon', 'https://github.com/paul-soporan/XBot')
             .setThumbnail('attachment://icon.png')
-            .setTitle('Productivity Commands')
+            .setTitle('Command Category: **Productivity**')
             .setDescription('List of Productivity Commands: ')
-            .setURL('https://github.com/paul-soporan/XBot/blob/master/README.md')
+            .setURL('https://github.com/paul-soporan/XBot/wiki/Productivity')
             .addField(
-              'base',
-              '`base {value} {baseFrom} to {baseTo}` to convert between bases\n**baseTo and baseFrom can be numbers between 2 and 36 or one of these strings: "BIN", "OCT", "DEC", "HEX"**'
+              '***base***',
+              '\n* **`base <value> <base> to <base>`**\n  - **where `<value>` must be a positive integer, NOT a floating point number**\n  - **where `<base>` must be a number between 2 and 36 (inclusive) or `BIN | OCT | DEC | HEX`**\n  - **to convert between bases**'
             )
             .addField(
-              'calc',
-              '`calc {math expression}` to evaluate a mathematical expression\n**A valid expression must use this expression syntax:*\n https://mathjs.org/docs/expressions/syntax.html'
+              '***calc***',
+              '\n* **`calc <mathematical expression>`**\n  - **where `<mathematical expression>` must be a valid mathematical expression, according to https://mathjs.org/docs/expressions/syntax.html**\n  - **to evaluate a mathematical expression using MathJS: https://mathjs.org/**'
             )
             .addField(
-              'color',
-              '`color {HEX value | RGB value}` to convert a color value between HEX and RGB (the type is auto-detected)'
+              '***color***',
+              '\n* **`color <HEX value | RGB value>`**\n  - **where `<HEX value>` must be a valid HEX color, examples: #000000 or #FFFFFF**\n  - **where `<RGB value>` must be a valid RGB color, examples: rgb(0,0,0) or rgb(255,255,255)**\n  - **to convert a color value between HEX and RGB (the type is auto-detected)**'
             )
             .addField(
-              'currency',
-              '`currency {value} {codeFrom} to {codeTo}` to convert between currencies\n**List of supported currencies:**\nhttps://fixer.io/symbols'
+              '***currency***',
+              '\n* **`currency <value> <code> to <code>`**\n  - **where `<code>` must be a valid code from https://fixer.io/symbols**\n  - **to convert between currencies using Fixer.io: https://fixer.io/**'
             )
             .addField(
-              'hash',
-              '`hash {sequence}` to hash a sequence of characters(can contain spaces) using md5, sha1 and sha256'
+              '***hash***',
+              '\n* **`hash <sequence>`**\n  - **to hash a sequence of characters using md5, sha1 and sha256**'
             )
-            .addField('roman', '`roman {roman numeral | decimal number}` to convert a number (the type is auto-detected)')
+            .addField(
+              '***roman***',
+              '\n* **`roman <roman numeral | decimal number>`**\n  - **where `<roman numeral>` must be a valid roman numeral**\n  - **where `<decimal number>` must be a positive integer, NOT a floating point number**\n  - **to convert a number (the type is auto-detected)**'
+            )
             .setTimestamp()
             .setFooter('https://github.com/paul-soporan/XBot', 'attachment://icon.png');
           message.channel.send(productivityCommands);
@@ -178,16 +197,22 @@ module.exports = {
             .attachFiles(['./assets/images/icon.png'])
             .setAuthor('XBot', 'attachment://icon', 'https://github.com/paul-soporan/XBot')
             .setThumbnail('attachment://icon.png')
-            .setTitle('Utility Commands')
+            .setTitle('Command Category: **Utility**')
             .setDescription('List of Utility Commands: ')
-            .setURL('https://github.com/paul-soporan/XBot/blob/master/README.md')
-            .addField('disable', '`disable {command}` to disable a command')
-            .addField('enable', '`enable {command}` to enable a command')
+            .setURL('https://github.com/paul-soporan/XBot/wiki/Utility')
             .addField(
-              'help',
-              '`help` to display a help embed or\n`help` {category} to display the list of commands from a category'
+              '***disable***',
+              '\n* **`disable <command>`**\n  - **where `<command>` must be a valid bot command**\n  - **to disable a command**'
             )
-            .addField('prefix', '`prefix {new prefix}` to change the prefix')
+            .addField(
+              '***enable***',
+              '\n* **`enable <command>`**\n  - **where `<command>` must be a valid bot command**\n  - **to enable a command**'
+            )
+            .addField(
+              '***help***',
+              '\n* **`help`**\n  - **to display a help message with useful information**\n* **`help <category>`**\n  - **where `<category>` must be a valid bot command category: `discord | fun | integrations | productivity | utility`**\n  - **to display the list of commands from a category**'
+            )
+            .addField('***prefix***', '\n* **`prefix <new prefix>`**\n  - **to change the prefix**')
             .setTimestamp()
             .setFooter('https://github.com/paul-soporan/XBot', 'attachment://icon.png');
           message.channel.send(utilityCommands);
@@ -200,20 +225,33 @@ module.exports = {
         .attachFiles(['./assets/images/icon.png'])
         .setAuthor('XBot', 'attachment://icon', 'https://github.com/paul-soporan/XBot')
         .setThumbnail('attachment://icon.png')
-        .setTitle('Help')
-        .setDescription('`help` {category} to display the list of commands from a category')
-        .addField('Categories:', '* Discord\n* Fun\n* Integrations\n* Productivity\n* Utility')
+        .setTitle('Welcome to the XBot help page!')
         .setURL('https://github.com/paul-soporan/XBot/blob/master/README.md')
+        .setDescription('You are running version 1.0.0: https://github.com/paul-soporan/XBot/releases/tag/1.0.0')
+        .addField(
+          '***Help***',
+          '* **`help <category>`**\n  - **where `<category>` must be a valid bot command category**\n  - **to display the list of commands from a category**'
+        )
+        .addField('***Categories:***', '* *Discord*\n* *Fun*\n* *Integrations*\n* *Productivity*\n* *Utility*')
+        .addField(
+          '**Documentation about this bot can be found on the GitHub Wiki:**',
+          'https://github.com/paul-soporan/XBot/wiki'
+        )
+        .addField(
+          '**If you have an issue or a suggestion, please create an issue on GitHub:**',
+          'https://github.com/paul-soporan/XBot/issues'
+        )
+        .addField('**For more information, visit the project page on Github:**', 'https://github.com/paul-soporan/XBot')
         .setTimestamp()
         .setFooter('https://github.com/paul-soporan/XBot', 'attachment://icon.png');
       message.channel.send(help);
     } else {
-      message.channel.send('Invalid Syntax! Try:\n`help` to display a help embed or\n`help` {category} to display the list of commands from a category');
+      message.channel.send('Invalid Syntax! Try:\n* **`help`**\n  - **to display a help message with useful information**\n* **`help <category>`**\n  - **where `<category>` must be a valid bot command category: `discord | fun | integrations | productivity | utility`**\n  - **to display the list of commands from a category**');
     }
   },
   prefix (args, message, pool) {
     if (args.length < 2) {
-      message.channel.send('Invalid Syntax! The new prefix is missing. Try:\n`prefix {new prefix}` to change the prefix');
+      message.channel.send('Invalid Syntax! The new prefix is missing. Try:\n* **`prefix <new prefix>`**\n  - **to change the prefix**');
     } else if (message.member.hasPermission('MANAGE_GUILD')) {
       args.splice(0, 1);
       const s = args.join(' ');

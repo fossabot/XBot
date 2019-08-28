@@ -261,7 +261,7 @@ client.on('message', (message) => {
             }
             break;
           default:
-            message.channel.send('Invalid Syntax! Try:\n`help` to display a help embed or\n`help` {category} to display the list of commands from a category');
+            message.channel.send('Invalid Syntax! Try:\n* **`help`**\n  - **to display a help message with useful information**\n* **`help <category>`**\n  - **where `<category>` must be a valid bot command category: `discord | fun | integrations | productivity | utility`**\n  - **to display the list of commands from a category**');
         }
       }
     })

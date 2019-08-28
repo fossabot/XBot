@@ -10,7 +10,7 @@ const {md5, sha1, sha256} = require('tiny-hashes');
 module.exports = {
   base (args, message) {
     if (args.length != 5 || args[3].toLowerCase() != 'to' || isNaN(args[1])) {
-      message.channel.send('Invalid Syntax! Try:\n`base {value} {baseFrom} to {baseTo}` to convert between bases\n**baseTo and baseFrom can be numbers between 2 and 36 or one of these strings: "BIN", "OCT", "DEC", "HEX"**');
+      message.channel.send('Invalid Syntax! Try:\n* **`base <value> <base> to <base>`**\n  - **where `<value>` must be a positive integer, NOT a floating point number**\n  - **where `<base>` must be a number between 2 and 36 (inclusive) or `BIN | OCT | DEC | HEX`**\n  - **to convert between bases**');
     } else {
       const baseValues = {
         BIN: 2,
@@ -34,20 +34,24 @@ module.exports = {
         to = parseFloat(args[4]);
       }
       if (!inRange(from, 2, 36) || !inRange(to, 2, 36)) {
-        message.channel.send('Invalid Syntax! Try:\n`base {value} {baseFrom} to {baseTo}` to convert between bases\n**baseTo and baseFrom can be numbers between 2 and 36 or one of these strings: "BIN", "OCT", "DEC", "HEX"**');
+        message.channel.send('Invalid Syntax! Try:\n* **`base <value> <base> to <base>`**\n  - **where `<value>` must be a positive integer, NOT a floating point number**\n  - **where `<base>` must be a number between 2 and 36 (inclusive) or `BIN | OCT | DEC | HEX`**\n  - **to convert between bases**');
         return;
       }
       message.channel.send(`Converted: ${parseInt(v, from).toString(to)}`);
     }
   },
   calc (args, message) {
-    args.splice(0, 1).join(' ');
+    args.splice(0, 1);
     const s = args.join(' ');
+    if (!s) {
+      message.channel.send('Invalid Syntax! Try:\n* **`calc <mathematical expression>`**\n  - **where `<mathematical expression>` must be a valid mathematical expression, according to https://mathjs.org/docs/expressions/syntax.html**\n  - **to evaluate a mathematical expression using MathJS: https://mathjs.org/**');
+      return;
+    }
     let res;
     try {
       res = math.evaluate(s);
     } catch (err) {
-      message.channel.send('Invalid Syntax! Try:\n`calc {math expression}` to evaluate a mathematical expression\n**A valid expression must use this expression syntax:**\nhttps://mathjs.org/docs/expressions/syntax.html');
+      message.channel.send('Invalid Syntax! Try:\n* **`calc <mathematical expression>`**\n  - **where `<mathematical expression>` must be a valid mathematical expression, according to https://mathjs.org/docs/expressions/syntax.html**\n  - **to evaluate a mathematical expression using MathJS: https://mathjs.org/**');
     }
     if (typeof res != 'object') {
       message.channel.send(res);
@@ -65,8 +69,8 @@ module.exports = {
   },
   color (args, message) {
     let v = args[1];
-    if (args.length > 2) {
-      message.channel.send('Invalid Syntax! Try:\n`color {HEX value | RGB value}` to convert a color value between HEX and RGB (the type is auto-detected)');
+    if (args.length != 2) {
+      message.channel.send('Invalid Syntax! Try:\n* **`color <HEX value | RGB value>`**\n  - **where `<HEX value>` must be a valid HEX color, examples: #000000 or #FFFFFF**\n  - **where `<RGB value>` must be a valid RGB color, examples: rgb(0,0,0) or rgb(255,255,255)**\n  - **to convert a color value between HEX and RGB (the type is auto-detected)**');
     } else if (v[0] === '#' && ([3, 4, 6, 8].indexOf(v.substring(1).length) > -1 && !isNaN(parseInt(v.substring(1), 16)))) {
       v = v.substring(1);
       let res = 'rgb(';
@@ -95,12 +99,12 @@ module.exports = {
       res = res.toUpperCase();
       message.channel.send(`Converted to HEX:\n\`${res}\``);
     } else {
-      message.channel.send('Invalid Syntax! Try:\n`color {HEX value | RGB value}` to convert a color value between HEX[e.g. #FFFFFF] and RGB[e.g. rgb(255,255,255)] (the type is auto-detected)');
+      message.channel.send('Invalid Syntax! Try:\n* **`color <HEX value | RGB value>`**\n  - **where `<HEX value>` must be a valid HEX color, examples: #000000 or #FFFFFF**\n  - **where `<RGB value>` must be a valid RGB color, examples: rgb(0,0,0) or rgb(255,255,255)**\n  - **to convert a color value between HEX and RGB (the type is auto-detected)**');
     }
   },
   currency (args, message) {
     if (args.length != 5 || args[3].toLowerCase() != 'to' || isNaN(args[1])) {
-      message.channel.send('Invalid Syntax! Try:\n`currency {value} {codeFrom} to {codeTo}` to convert between currencies\n**List of supported currencies:**\nhttps://fixer.io/symbols');
+      message.channel.send('Invalid Syntax! Try:\n* **`currency <value> <code> to <code>`**\n  - **where `<code>` must be a valid code from https://fixer.io/symbols**\n  - **to convert between currencies using Fixer.io: https://fixer.io/**');
     } else {
       const v = args[1];
       const from = args[2].toUpperCase();
@@ -115,7 +119,7 @@ module.exports = {
           const res = val / fval * tval;
           message.channel.send(`Converted:\n\`${res} ${to}\``);
         } else {
-          message.channel.send('Invalid Syntax! Try:\n`currency {value} {codeFrom} to {codeTo}` to convert between currencies\n**List of supported currencies:**\nhttps://fixer.io/symbols');
+          message.channel.send('Invalid Syntax! Try:\n* **`currency <value> <code> to <code>`**\n  - **where `<code>` must be a valid code from https://fixer.io/symbols**\n  - **to convert between currencies using Fixer.io: https://fixer.io/**');
         }
       });
     }
@@ -138,7 +142,7 @@ module.exports = {
         .setFooter('Hashed using: https://github.com/jbt/tiny-hashes');
       message.channel.send(hashes);
     } else {
-      message.channel.send('Invalid Syntax! You didn\'t provide anything to hash. Try:\n`hash {string}` to hash a sequence of characters(can contain spaces) using md5, sha1 and sha256');
+      message.channel.send('Invalid Syntax! You didn\'t provide the sequence to hash. Try:\n* **`hash <sequence>`**\n  - **to hash a sequence of characters using md5, sha1 and sha256**');
     }
   },
   roman (args, message) {
@@ -151,10 +155,12 @@ module.exports = {
       V: 5,
       I: 1,
     };
+    if (args.length != 2) {
+      message.channel.send('Invalid Syntax! Try:\n* **`roman <roman numeral | decimal number>`**\n  - **where `<roman numeral>` must be a valid roman numeral**\n  - **where `<decimal number>` must be a positive integer, NOT a floating point number**\n  - **to convert a number (the type is auto-detected)**');
+      return;
+    }
     const isRoman = [...args[1]].every((char) => Object.prototype.hasOwnProperty.call(romanToDecimal, char));
-    if (args.length > 2) {
-      message.channel.send('Invalid Syntax! Try:\n`roman {roman numeral | decimal number}` to convert between roman numerals and decimal numbers (the type is auto-detected)');
-    } else if (isRoman) {
+    if (isRoman) {
       const s = args[1];
       let val = 0;
       for (let i = 0; i < s.length - 1; ++i) {
@@ -167,7 +173,7 @@ module.exports = {
       val += romanToDecimal[s[s.length - 1]];
       message.channel.send(`Converted to a decimal number:\n\`${val}\``);
     } else if (isNaN(args[1])) {
-      message.channel.send('Invalid Syntax! Try:\n`roman {roman numeral | decimal number}` to convert between roman numerals and decimal numbers (the type is auto-detected)');
+      message.channel.send('Invalid Syntax! Try:\n* **`roman <roman numeral | decimal number>`**\n  - **where `<roman numeral>` must be a valid roman numeral**\n  - **where `<decimal number>` must be a positive integer, NOT a floating point number**\n  - **to convert a number (the type is auto-detected)**');
     } else {
       const decimalValue = [1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1];
       const romanValue = ['M', 'CM', 'D', 'CD', 'C', 'XC', 'L', 'XL', 'X', 'IX', 'V', 'IV', 'I'];

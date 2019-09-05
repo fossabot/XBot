@@ -6,17 +6,17 @@
   "author": "Paul Soporan",
   "license": "GNU Lesser General Public License v3.0",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "test": "mocha --exit"
   },
   "dependencies": {
     "discord.js": "^11.5.1",
     "dotenv": "^8.1.0",
     "eslint": "^6.3.0",
     "mathjs": "^6.2.1",
-    "node-opus": "^0.3.2",
+    "mocha": "^6.2.0",
     "pg": "^7.12.1",
     "request": "^2.88.0",
-    "save": "^2.4.0",
     "snoowrap": "^1.19.0",
     "tiny-hashes": "^1.0.1",
     "urban-dictionary": "^2.2.1"

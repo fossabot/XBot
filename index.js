@@ -1,4 +1,3 @@
-/* eslint-disable sort-keys */
 const Discord = require('discord.js');
 const {Pool} = require('pg');
 
@@ -23,6 +22,8 @@ const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: true,
 });
+
+exports.pool = pool;
 
 client.on('guildCreate', (guild) => {
   const sql = 'INSERT INTO servers (id, prefix, disabled) VALUES ($1, \'!x\', \'\')';

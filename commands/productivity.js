@@ -1,4 +1,3 @@
-/* eslint-disable sort-keys */
 const Discord = require('discord.js');
 const request = require('request');
 const math = require('mathjs');

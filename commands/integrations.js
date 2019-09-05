@@ -1,4 +1,3 @@
-/* eslint-disable sort-keys */
 'use strict';
 const Discord = require('discord.js');
 const request = require('request');

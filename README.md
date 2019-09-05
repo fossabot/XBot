@@ -1,4 +1,4 @@
-# XBot
+# XBot ![](https://github.com/paul-soporan/XBot/workflows/Node%20CI/badge.svg)
 
 ![Bot Icon](assets/images/icon_128x128.png)
 

@@ -25,3 +25,19 @@ jobs:
         npm test
       env:
         CI: true
+        BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+        PGHOST: ${{ secrets.PGHOST }}
+        PGUSER: ${{ secrets.PGUSER }}
+        PGDATABASE: ${{ secrets.PGDATABASE }}
+        PGPASSWORD: ${{ secrets.PGPASSWORD }}
+        DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        API_KEYS_FIXERIO: ${{ secrets.API_KEYS_FIXERIO }}
+        API_KEYS_OMDB: ${{ secrets.API_KEYS_OMDB }}
+        API_KEYS_TWITCH: ${{ secrets.API_KEYS_TWITCH }}
+        API_KEYS_OPENWEATHER: ${{ secrets.API_KEYS_OPENWEATHER }}
+        API_KEYS_YANDEXTRANSLATE: ${{ secrets.API_KEYS_YANDEXTRANSLATE }}
+        API_KEYS_GOOGLECLOUDPLATFORM: ${{ secrets.API_KEYS_GOOGLECLOUDPLATFORM }}
+        OAUTH_IMGUR_CLIENT_ID: ${{ secrets.OAUTH_IMGUR_CLIENT_ID }}
+        OAUTH_REDDIT_CLIENT_ID: ${{ secrets.OAUTH_REDDIT_CLIENT_ID }}
+        OAUTH_REDDIT_CLIENT_SECRET: ${{ secrets.OAUTH_REDDIT_CLIENT_SECRET }}
+        OAUTH_REDDIT_REFRESH_TOKEN: ${{ secrets.OAUTH_REDDIT_REFRESH_TOKEN }}
